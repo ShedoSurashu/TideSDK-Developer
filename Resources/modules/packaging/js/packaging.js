@@ -2446,7 +2446,19 @@ PackageProject.setupDesktopView = function()
 			// set desktop packaging path
 			var runtime = PackageProject.currentProject.runtime;
 			var sdk = Titanium.Project.getSDKVersions(runtime);
-			PackageProject.desktopPackage = Titanium.Filesystem.getFile(sdk.getPath(),'tibuild.py');
+			
+			// Perform a SDK version check - tibuild.py was renamed to tidebuilder.py in 1.3.0
+			var builder;
+			var versions = sdk.getVersion().split('.');
+			if (parseInt(versions[0]) < 1 ||
+				(parseInt(versions[0]) == 1 && parseInt(versions[1]) < 3))
+			{
+				builder = 'tibuild.py';
+			} else {
+				builder = 'tidebuilder.py';
+			}
+
+			PackageProject.desktopPackage = Titanium.Filesystem.getFile(sdk.getPath(),builder);
 			var dest = Titanium.Filesystem.getFile(PackageProject.currentProject.dir,'dist',Titanium.platform);
 			if (dest.exists()==false)
 			{
