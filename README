@@ -1,42 +1,27 @@
 -----------------
- TiDev Community
+ TideSDK Developer
 -----------------
 
-This is a new name for old "Appcelerator Titanium Developer"
-
-Titanium Developer has been replaced by Titanium Studio. Although the source code remains open source, and the appcelerator will no longer be maintaining this code or releasing any new versions.
-
-However, I think I am making improvements necessary to continue this tool as well.
+This is a revived version of the old "Appcelerator Titanium Developer", based on Adriano's "TiDev Community", updated to work with the latest TideSDK versions.
 
 Everyone can help in this project by sending ideas or making changes to the code.
 
+To build, download this source and import it to a built version of TideSDK Developer.
 
-To compile, download this source and import to the "Titanium Developer" or "Titanium Studio" (Or TiDev Community ;) ) and Run or Compile.
+To get a built version of TideSDK Developer in the first place, run:
 
-
-To download the latest compiled version, goto http://api.appcelerator.net/p/pages/app_page?token=m4rZLSv6
-
-
-
-
-
-Adriano Paladini
-email/gtalk: adrianopaladini@gmail.com
-
-
-
+```
+python "path-to-TideSDK-sdk/tidebuilder.py" . -r
+```
 
 ---------------------------------
 
+This is the source code for the TideSDK Developer desktop application
+that is a visual environment for TideSDK.
 
-This is the source code for the Titanium Developer desktop application
-that is a visual environment for the Titanium SDKs.
+More information on TideSDK can be found at [http://www.tidesdk.org](http://www.tidesdk.org)
 
-More information on Titanium can be found at http://www.appcelerator.com.
-
-Please visit the Appcelerator Developer Community at http://developer.appcelerator.com
-
-
+Copyright(c) 2011-2012 by TideSDK Developer Contributors
 Copyright(c) 2008-2011 by Appcelerator, Inc. All Rights Reserved.
 Please see the LICENSE file for more information on the license. This source code
 is licensed under the Apache Public License (version 2).

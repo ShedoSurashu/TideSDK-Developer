@@ -1,10 +1,10 @@
-#appname:TiDev Community
-#appid:com.adrianopaladini.tidevcommunity
-#publisher:adriano
+#appname:TideSDK Developer
+#appid:com.tidesdkcommunity.tidesdkdeveloper
+#publisher:TideSDK Community
 #image:titanium.png
-#url:http://www.appcelerator.com
+#url:https://github.com/neam/TideSDK-Developer/
 #guid:89bdfb92-72de-478f-9413-b2e6bcd682d2
-#desc:Titanium Developer is a cool new app created by Appcelerator
+#desc:TideSDK Developer is a revived version of Titanium Developer created by Appcelerator
 #type:desktop
 runtime:1.1.0
 mobilesdk:1.7.2
