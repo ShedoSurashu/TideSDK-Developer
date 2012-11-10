@@ -936,6 +936,7 @@ TiDev.onlineListenerFired = false;
 //
 // add network connnectivity listener
 //
+/*
 Titanium.Network.addConnectivityListener(function(online)
 {
 	TiDev.onlineListenerFired  = true;
@@ -952,6 +953,8 @@ Titanium.Network.addConnectivityListener(function(online)
 		$('#tiui_signal_off').css('display','none');
 	}
 });
+*/
+TiDev.onlineListenerFired = true;
 
 //
 // Generic Cloud Service Handler
