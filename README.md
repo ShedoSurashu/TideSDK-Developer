@@ -5,11 +5,17 @@ This is a revived version of Appcelerator's [Titanium Developer](https://github.
 
 It is being updated to work with the latest TideSDK releases, and without the long gone Appcelerator Cloud services.
 
-To install, download this source, import it to TideSDK Developer, and launch it like any other TideSDK application.
+Download
+-------
 
-To build and run TideSDK Developer from the command line:
+	git clone https://github.com/neam/TideSDK-Developer.git
 
-	python "path-to-TideSDK-sdk/tidebuilder.py" . -r
+Build and run
+-----
+
+	python "path-to-TideSDK-sdk/tidebuilder.py" TideSDK-Developer -r
+
+Now it should be running! Feel free to import the project into itself, and hack on it. :)
 
 TideSDK?
 -----
