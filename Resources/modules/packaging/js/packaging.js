@@ -2446,11 +2446,9 @@ PackageProject.setupDesktopView = function()
 			var runtime = PackageProject.currentProject.runtime;
 			var sdk = Titanium.Project.getSDKVersions(runtime);
 			
-			// Perform a SDK version check - tibuild.py was renamed to tidebuilder.py in 1.3.0
+			// tibuild.py was renamed to tidebuilder.py in 1.3.0-beta
 			var builder;
-			var versions = sdk.getVersion().split('.');
-			if (parseInt(versions[0]) < 1 ||
-				(parseInt(versions[0]) == 1 && parseInt(versions[1]) < 3))
+			if (Titanium.UpdateManager.compareVersions(sdk.getVersion(), '1.3.0-beta') < 0)
 			{
 				builder = 'tibuild.py';
 			} else {
