@@ -543,6 +543,10 @@ Projects.showLogin = function()
 Projects.setupView = function(options)
 {
 	TiUI.setBackgroundColor('#06284D');
+
+	// Since no login servers are available atm, simply show authenticated view
+	Projects.showAuthenticatedView(options);
+	return;
 	
 	// see if user has registered
  	try
