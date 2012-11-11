@@ -2337,6 +2337,8 @@ PackageProject.setupDesktopView = function()
 	// setup buttons
 	TiUI.GreyButton({id:'launch_kill_button'});
 	TiUI.GreyButton({id:'launch_app_button'});
+	TiUI.GreyButton({id:'launch_package_bundle_button'});
+	TiUI.GreyButton({id:'launch_package_network_button'});
 
 	TiUI.GreyButton({id:'desktop_package_button'});
 
@@ -2429,12 +2431,9 @@ PackageProject.setupDesktopView = function()
 	//
 	// launch desktop app
 	//
-	$('#launch_app_button').click(function()
+	var launchConsoleCommand = function(command)
 	{
 		if ($(this).hasClass('disabled'))return;
-		
-		$('#launch_app_button').addClass('disabled');
-		$('#launch_kill_button').removeClass('disabled');
 		
 		if (PackageProject.currentAppPID == null)
 		{
@@ -2459,7 +2458,22 @@ PackageProject.setupDesktopView = function()
 			}
 
 			PackageProject.desktopPackage = Titanium.Filesystem.getFile(sdk.getPath(),builder);
-			var dest = Titanium.Filesystem.getFile(PackageProject.currentProject.dir,'dist',Titanium.platform);
+
+			var dest;
+			switch (command) {
+
+				case 'desktop.launch':
+					dest = Titanium.Filesystem.getFile(PackageProject.currentProject.dir,'dist',Titanium.platform);
+					break;
+
+				case 'desktop.package_bundle':
+					dest = Titanium.Filesystem.getFile(PackageProject.currentProject.dir,'packages',Titanium.platform,'bundle');
+					break;
+
+				case 'desktop.package_network':
+					dest = Titanium.Filesystem.getFile(PackageProject.currentProject.dir,'packages',Titanium.platform,'network');
+					break;
+			}
 			if (dest.exists()==false)
 			{
 				dest.createDirectory(true);
@@ -2472,21 +2486,72 @@ PackageProject.setupDesktopView = function()
 			// write out new manifest based on current modules
 			Titanium.Project.writeManifest(PackageProject.currentProject);
 
-			Titanium.Analytics.featureEvent('desktop.launch',{sdk:runtime,appid:PackageProject.currentProject.appid,name:PackageProject.currentProject.name,guid:PackageProject.currentProject.guid});
+			Titanium.Analytics.featureEvent(command,{sdk:runtime,appid:PackageProject.currentProject.appid,name:PackageProject.currentProject.name,guid:PackageProject.currentProject.guid});
 			PackageProject.desktopAppLaunchDate = new Date();
-			
-			// launch desktop app
-			PackageProject.currentAppPID = TiDev.launchPython(
-				[PackageProject.desktopPackage.toString(),
-				"-d", dest.toString(), // Staging directory
-				"-a", assets.toString(), // Assets path
-				"-n", // Don't include the installer
-				"-r", // Run it!
-				"-v", // Verbose
-				"-s", basePath.toString(), // SDK path
-				appdir.toString()]);
-			
-		 	$('#desktop_launch_viewer').append('<div style="margin-bottom:3px">Preparing to package and launch desktop app. One moment...</div>');
+
+			var exitMessage;
+			switch (command) {
+
+				case 'desktop.launch':
+
+					$('#launch_app_button').addClass('disabled');
+					$('#launch_kill_button').removeClass('disabled');
+
+					// launch desktop app
+					PackageProject.currentAppPID = TiDev.launchPython(
+						[PackageProject.desktopPackage.toString(),
+						"-d", dest.toString(), // Staging directory
+						"-a", assets.toString(), // Assets path
+						"-n", // Don't include the installer
+						"-r", // Run it!
+						"-v", // Verbose
+						"-s", basePath.toString(), // SDK path
+						appdir.toString()]);
+
+					$('#desktop_launch_viewer').append('<div style="margin-bottom:3px">Preparing to package and launch desktop app. One moment...</div>');
+
+					exitMessage = 'Done launching!';
+
+					break;
+
+				case 'desktop.package_bundle':
+
+					PackageProject.currentAppPID = TiDev.launchPython(
+						[PackageProject.desktopPackage.toString(),
+						"-d", dest.toString(), // Staging directory
+						"-a", assets.toString(), // Assets path
+						"-t", 'bundle',
+						"-p", // Package it!
+						"-v", // Verbose
+						"-s", basePath.toString(), // SDK path
+						appdir.toString()]);
+
+					$('#desktop_launch_viewer').append('<div style="margin-bottom:3px">Preparing to package desktop app together with runtime. One moment...</div>');
+
+					exitMessage = 'Done packaging!';
+					
+					break;
+
+				case 'desktop.package_network':
+
+					PackageProject.currentAppPID = TiDev.launchPython(
+						[PackageProject.desktopPackage.toString(),
+						"-d", dest.toString(), // Staging directory
+						"-a", assets.toString(), // Assets path
+						"-t", 'network',
+						"-p", // Package it!
+						"-v", // Verbose
+						"-s", basePath.toString(), // SDK path
+						appdir.toString()]);
+
+					$('#desktop_launch_viewer').append('<div style="margin-bottom:3px">Preparing to package desktop app without runtime. One moment...</div>');
+
+					exitMessage = 'Done packaging!';
+
+					break;
+
+			}
+
 			console.log("process="+PackageProject.currentAppPID);
 			var buf = '';
 			PackageProject.currentAppPID.setOnRead(function(event)
@@ -2517,13 +2582,31 @@ PackageProject.setupDesktopView = function()
 				PackageProject.currentAppPID = null;
 				$('#launch_kill_button').addClass('disabled');
 				$('#launch_app_button').removeClass('disabled');
-				
+
+				$('#desktop_launch_viewer').append('<div style="margin-top:3px">' + exitMessage + '</div>');
+
 			});
 					
 			PackageProject.currentAppPID.launch();
 		}
 		
+	};
+
+	$('#launch_app_button').click(function()
+	{
+		launchConsoleCommand('desktop.launch');
 	});
+
+	$('#launch_package_bundle_button').click(function()
+	{
+		launchConsoleCommand('desktop.package_bundle');
+	});
+
+	$('#launch_package_network_button').click(function()
+	{
+		launchConsoleCommand('desktop.package_network');
+	});
+
 	// setup desktop links handler
 	$('#desktop_links').click(function()
 	{
@@ -2939,7 +3022,7 @@ Titanium.UI.currentWindow.addEventListener(function(event)
 // register module
 TiDev.registerModule({
 	name:'packaging',
-	displayName: '<u>T</u>est', // & Package
+	displayName: '<u>T</u>est & Package',
 	perspectives:['projects'],
 	html:'packaging.html',
 	idx:4,

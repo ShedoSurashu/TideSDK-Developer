@@ -2,6 +2,7 @@
 
 	- Made app work with current version of TideSDK 1.3.0-beta
 	- Inactivated views/features that are dependant on non-existing Cloud services
+	- Added ability to package app locally with and without runtime directly from previously called "Launch" screen (now "Control Panel")
 	
 1.3.03 (2011-08-20) - (Not closed Yet) - Last version of Adriano's TiDev Community
 
