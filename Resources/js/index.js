@@ -13,7 +13,7 @@ TiDev.moduleCount = 0;
 TiDev.perspectiveCount = 0;
 
 // global db var
-TiDev.db = Titanium.Database.open("TiDevCommunity"); //TiDeveloper
+TiDev.db = Titanium.Database.open("TideSDK-Developer");
 
 // track active perspective and subtab
 TiDev.activePerspective = {};
