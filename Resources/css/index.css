@@ -71,3 +71,11 @@ select
 	font-size:11px;
 	color:#777;
 }
+
+/* Hiding cloud-related ui elements */
+#desktop_package, #desktop_links {
+	display: none;
+}
+#tiui_statusbar {
+	display: none;
+}

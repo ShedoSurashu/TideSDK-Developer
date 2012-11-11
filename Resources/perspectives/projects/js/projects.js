@@ -678,7 +678,7 @@ Projects.showAuthenticatedView = function(options)
 		// if we have projects and no tab is selected, select edit
 		if (options && options.showEditProjectTab == true)
 		{
-			TiDev.subtabChange(1);
+			TiDev.subtabChange(0); // Edit project tab as offset from first tab
 		}
 		else
 		{
