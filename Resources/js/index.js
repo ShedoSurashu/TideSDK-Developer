@@ -419,9 +419,11 @@ TiDev.subtabChange = function(idx, lognav)
 	}
 	
 	// call blur on 
-	if (TiDev.activeSubtab.callback)
+	if (TiDev.activeSubtab)
 	{
-		TiDev.activeSubtab.callback('blur')
+		if (TiDev.activeSubtab.callback) {
+			TiDev.activeSubtab.callback('blur')
+		}
 	}
 	TiDev.activeSubtab = TiDev.activePerspective.views[idx];
 	
