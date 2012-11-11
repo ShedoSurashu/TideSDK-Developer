@@ -2939,7 +2939,7 @@ Titanium.UI.currentWindow.addEventListener(function(event)
 // register module
 TiDev.registerModule({
 	name:'packaging',
-	displayName: '<u>T</u>est & Package',
+	displayName: '<u>T</u>est', // & Package
 	perspectives:['projects'],
 	html:'packaging.html',
 	idx:4,

@@ -543,6 +543,10 @@ Projects.showLogin = function()
 Projects.setupView = function(options)
 {
 	TiUI.setBackgroundColor('#06284D');
+
+	// Since no login servers are available atm, simply show authenticated view
+	Projects.showAuthenticatedView(options);
+	return;
 	
 	// see if user has registered
  	try
@@ -678,7 +682,7 @@ Projects.showAuthenticatedView = function(options)
 		// if we have projects and no tab is selected, select edit
 		if (options && options.showEditProjectTab == true)
 		{
-			TiDev.subtabChange(1);
+			TiDev.subtabChange(0); // Edit project tab as offset from first tab
 		}
 		else
 		{
