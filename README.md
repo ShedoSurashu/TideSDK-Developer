@@ -3,7 +3,7 @@ TideSDK Developer
 
 This is a revived version of Appcelerator's [Titanium Developer](https://github.com/appcelerator/titanium_developer), continued from Adriano's [TiDev Community](https://github.com/adrianopaladini/titanium_developer) fork from 2011.
 
-It is being updated to work with the latest TideSDK releases, and without the long gone Appcelerator Cloud services.
+It works with the latest TideSDK releases (1.2.0.RC4 and 1.3.0-beta), and without the long gone Appcelerator Cloud services.
 
 Download
 -------
