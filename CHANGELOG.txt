@@ -1,9 +1,7 @@
 1.4.0 (2012-11-11) - First version of TideSDK Developer
 
-	- Make app work with current version of TideSDK 1.3.0-beta
-
-	TODO:
-	- Update interface to reflect current status of Cloud services
+	- Made app work with current version of TideSDK 1.3.0-beta
+	- Inactivated views/features that are dependant on non-existing Cloud services
 	
 1.3.03 (2011-08-20) - (Not closed Yet) - Last version of Adriano's TiDev Community
 
