@@ -8,7 +8,6 @@
 #type:desktop
 runtime:1.3.0-beta
 sdk:1.3.0-beta
-tiapp:1.3.0-beta
 app:1.3.0-beta
 codec:1.3.0-beta
 database:1.3.0-beta
