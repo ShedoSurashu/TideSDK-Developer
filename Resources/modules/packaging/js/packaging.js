@@ -2500,6 +2500,7 @@ PackageProject.setupDesktopView = function()
 						[PackageProject.desktopPackage.toString(),
 						"-d", dest.toString(), // Staging directory
 						"-a", assets.toString(), // Assets path
+						"-i", 'dist,packages', // Ignore
 						"-n", // Don't include the installer
 						"-r", // Run it!
 						"-v", // Verbose
@@ -2518,6 +2519,7 @@ PackageProject.setupDesktopView = function()
 						[PackageProject.desktopPackage.toString(),
 						"-d", dest.toString(), // Staging directory
 						"-a", assets.toString(), // Assets path
+						"-i", 'dist,packages', // Ignore
 						"-t", 'bundle',
 						"-p", // Package it!
 						"-v", // Verbose
@@ -2536,6 +2538,7 @@ PackageProject.setupDesktopView = function()
 						[PackageProject.desktopPackage.toString(),
 						"-d", dest.toString(), // Staging directory
 						"-a", assets.toString(), // Assets path
+						"-i", 'dist,packages', // Ignore
 						"-t", 'network',
 						"-p", // Package it!
 						"-v", // Verbose
