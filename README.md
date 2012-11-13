@@ -1,14 +1,13 @@
 TideSDK Developer
 =======
 
-This is a revived version of Appcelerator's [Titanium Developer](https://github.com/appcelerator/titanium_developer), continued from Adriano's [TiDev Community](https://github.com/adrianopaladini/titanium_developer) fork from 2011.
-
-It works with the latest TideSDK releases (1.2.0.RC4 and 1.3.0-beta), and without the long gone Appcelerator Cloud services.
+This is Official TideSDK Developer developed and maintained by community effort of TideSDK Team
+TideSDK Developer Supports the latest releases of TideSDK.
 
 Download
 -------
 
-	git clone https://github.com/neam/TideSDK-Developer.git
+	git clone https://github.com/TideSDK/TideSDK-Developer.git
 
 Build and run
 -----
@@ -23,6 +22,8 @@ More information on TideSDK can be found at [http://www.tidesdk.org](http://www.
 
 Legal
 -----
+
+This is a revived version of Appcelerator's [Titanium Developer](https://github.com/appcelerator/titanium_developer), continued from Adriano's [TiDev Community](https://github.com/adrianopaladini/titanium_developer) fork from 2011.
 
 This is the source code for the TideSDK Developer desktop application that is a visual environment for TideSDK.
 

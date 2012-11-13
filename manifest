@@ -1,10 +1,10 @@
 #appname:TideSDK Developer
-#appid:com.tidesdkcommunity.tidesdkdeveloper
-#publisher:TideSDK Community
-#image:titanium.png
-#url:https://github.com/neam/TideSDK-Developer/
+#appid:org.tidesdk.tidesdkdeveloper
+#publisher:Software In Public Interest (SPI)
+#image:tidesdk.png
+#url:http://tidesdk.org
 #guid:89bdfb92-72de-478f-9413-b2e6bcd682d2
-#desc:TideSDK Developer is a revived version of Titanium Developer created by Appcelerator
+#desc:TideSDK Developer is official TideSDK Offline Development Environment
 #type:desktop
 runtime:1.3.0-beta
 sdk:1.3.0-beta

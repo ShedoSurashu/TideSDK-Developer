@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <ti:app xmlns:ti='http://ti.appcelerator.org'>
-<id>com.tidesdkcommunity.tidesdkdeveloper</id>
+<id>org.tidesdk.tidesdkdeveloper</id>
 <name>TideSDK Developer</name>
-<version>1.4.0-dev</version>
+<version>1.3.0-beta</version>
 <publisher>TideSDK Community</publisher>
-<url>https://github.com/neam/TideSDK-Developer/</url>
+<url>https://tidesdk.org/</url>
 <distribution-url>tidesdk-api.local</distribution-url>
-<icon>titanium.png</icon>
+<icon>tidesdk.png</icon>
 <dmg_background>dmg_background.png</dmg_background>
-<copyright>2012 by TideSDK Developer contributors</copyright>
+<copyright>2012 by Software In Public Intereset (SPI)</copyright>
     <window>
         <id>initial</id>
         <title>TideSDK Developer</title>
