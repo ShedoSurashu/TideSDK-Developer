@@ -2,11 +2,11 @@
 <ti:app xmlns:ti='http://ti.appcelerator.org'>
 <id>org.tidesdk.tidesdkdeveloper</id>
 <name>TideSDK Developer</name>
-<version>1.3.0-beta</version>
+<version>0.1</version>
 <publisher>TideSDK Community</publisher>
 <url>https://tidesdk.org/</url>
 <distribution-url>tidesdk-api.local</distribution-url>
-<icon>tidesdk.png</icon>
+<icon>default_app_logo.png</icon>
 <dmg_background>dmg_background.png</dmg_background>
 <copyright>2012 by Software In Public Intereset (SPI)</copyright>
     <window>
