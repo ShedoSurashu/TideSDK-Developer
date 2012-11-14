@@ -41,21 +41,21 @@ EditProject.setFormData = function(p)
 	
 	function openProjectFolder()
 	{
-		switch(Titanium.platform)
+		switch(Ti.platform)
 		{
 			case 'osx':
 			{
-				Titanium.Process.createProcess(["/usr/bin/open",p.dir]).launch();
+				Ti.Process.createProcess(["/usr/bin/open",p.dir]).launch();
 				break;
 			}
 			case 'win32':
 			{
-				Titanium.Process.createProcess(["C:\\Windows\\explorer.exe","/e,"+Titanium.Filesystem.getFile(p.dir).toString()]).launch();
+				Ti.Process.createProcess(["C:\\Windows\\explorer.exe","/e,"+Ti.Filesystem.getFile(p.dir).toString()]).launch();
 				break;
 			}
 			case 'linux':
 			{
-				Titanium.Process.createProcess(["xdg-open",p.dir]).launch();
+				Ti.Process.createProcess(["xdg-open",p.dir]).launch();
 				break;
 			}
 		}
@@ -101,7 +101,7 @@ EditProject.setFormData = function(p)
 		$('#project_edit .frame').css('height','310px');
 
 		// populate select
-		var versions = Titanium.Project.getMobileSDKVersions();
+		var versions = Ti.Project.getMobileSDKVersions();
 		var html = '';
 		for (var i=0;i<versions.length;i++)
 		{
@@ -113,7 +113,7 @@ EditProject.setFormData = function(p)
 	else
 	{
 		// populate select
-		var versions = Titanium.Project.getSDKVersions();
+		var versions = Ti.Project.getSDKVersions();
 		var html = '';
 		for (var i=0;i<versions.length;i++)
 		{
@@ -196,14 +196,14 @@ EditProject.setupView = function()
 		{
 			try
 			{
-				Titanium.Analytics.featureEvent('project.delete',{guid:EditProject.currentProject.guid,name:EditProject.currentProject.name,appid:EditProject.currentProject.appid});
+				Ti.Analytics.featureEvent('project.delete',{guid:EditProject.currentProject.guid,name:EditProject.currentProject.name,appid:EditProject.currentProject.appid});
 				
 				// remove db data
 				TiDev.db.execute('DELETE FROM PROJECTS WHERE ID = ?', EditProject.currentProject.id);
 				TiDev.db.execute('DELETE FROM PROJECTMODULES WHERE GUID = ?', EditProject.currentProject.guid);
 
 				// remove directory and contents only after super double check. I call this the 'bess ho' alert.  -JGH
-				var f = Titanium.Filesystem.getFile(EditProject.currentProject.dir);
+				var f = Ti.Filesystem.getFile(EditProject.currentProject.dir);
 				if (confirm("WARNING: Delete the directory and it's contents:\n\n" + f.nativePath() + "\n\nor leave the directory contents intact?\n\nClick 'OK' to delete or 'Cancel' to leave directory intact."))
 				{
 					f.deleteDirectory(true);
@@ -247,7 +247,7 @@ EditProject.setupView = function()
 	$('#edit_project_icon_button').click(function()
 	{
 		var props = {multiple:false,directories:false,files:true,types:['gif','png','jpg']};
-		Titanium.UI.openFileChooserDialog(function(f)
+		Ti.UI.openFileChooserDialog(function(f)
 		{
 			if (f.length)
 			{
@@ -339,8 +339,8 @@ EditProject.setupView = function()
 		var delay = 2000;
 
 		// update tiapp.xml
-		var tiapp = Titanium.Filesystem.getFileStream(EditProject.currentProject.dir,'tiapp.xml');
-		tiapp.open(Titanium.Filesystem.MODE_READ);
+		var tiapp = Ti.Filesystem.getFileStream(EditProject.currentProject.dir,'tiapp.xml');
+		tiapp.open(Ti.Filesystem.MODE_READ);
 		
 		var line = tiapp.readLine(true);
 		var newXML = line + '\n';
@@ -412,7 +412,7 @@ EditProject.setupView = function()
 				// use default if not exists
 				if (!iconFound)
 				{
-					var path = Titanium.App.appURLToPath('app://images');
+					var path = Ti.App.appURLToPath('app://images');
 					image = TFS.getFile(path,'default_app_logo.png')
 					var image_dest = TFS.getFile(resources,image.name());
 					if (!image_dest.exists()) {
@@ -433,10 +433,10 @@ EditProject.setupView = function()
 				newXML += '<copyright>' + copyright + '</copyright>\n';
 				continue;
 			}
-			//Titanium.API.info('ADDING LINE ' + line)
+			//Ti.API.info('ADDING LINE ' + line)
 			newXML += line + '\n';
 		}
-		tiapp.open(Titanium.Filesystem.MODE_WRITE);
+		tiapp.open(Ti.Filesystem.MODE_WRITE);
 		tiapp.write(newXML);
 		tiapp.close();
 
@@ -453,7 +453,7 @@ EditProject.setupView = function()
 			delay = 5000;
 		}
 		
-		Titanium.Analytics.settingsEvent('project.edit',{name:name,desc:desc,publisher:pub,url:url,image:imageName,sdk:runtime,appid:appid,version:version,copyright:copyright,ruby:rubyOn,python:pythonOn});
+		Ti.Analytics.settingsEvent('project.edit',{name:name,desc:desc,publisher:pub,url:url,image:imageName,sdk:runtime,appid:appid,version:version,copyright:copyright,ruby:rubyOn,python:pythonOn});
 
 		// update cache
 		for (var i=0;i<Projects.projectList.length;i++)

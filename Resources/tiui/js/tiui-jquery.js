@@ -579,7 +579,7 @@ TiUI.MainTab = function()
 		
 		
 		$('#fullscreen_button').click(function(){
-			Titanium.UI.currentWindow.setFullscreen(!Titanium.UI.currentWindow.isFullscreen());
+			Ti.UI.currentWindow.setFullscreen(!Ti.UI.currentWindow.isFullscreen());
 		})
 	};
 	

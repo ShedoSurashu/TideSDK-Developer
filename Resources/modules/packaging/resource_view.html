@@ -253,12 +253,12 @@
     
 	window.onload = function()
 	{
-		var currentWindow = Titanium.UI.getCurrentWindow();
+		var currentWindow = Ti.UI.getCurrentWindow();
 		var fn = currentWindow.getDialogParameter('file');
 		var ln = parseInt(currentWindow.getDialogParameter('line'));
 		var msg = currentWindow.getDialogParameter('msg');
 		document.title = fn;
-		var f = Titanium.Filesystem.getFileStream(fn);
+		var f = Ti.Filesystem.getFileStream(fn);
 		f.open(f.MODE_READ);
 		var c = 1;
 		var html = '<div class="line-gutter-backdrop"></div>'+

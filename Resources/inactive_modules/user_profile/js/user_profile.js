@@ -332,7 +332,7 @@ UserProfile.setupView = function()
 	$('#android_sdk_icon_button').click(function()
 	{
 		var props = {multiple:false,directories:true,files:false};
-		Titanium.UI.currentWindow.openFolderChooserDialog(function(f)
+		Ti.UI.currentWindow.openFolderChooserDialog(function(f)
 		{
 			if (f.length)
 			{

@@ -2,7 +2,7 @@ importScript("app://modules/packaging/js/jslint.js");
 
 onmessage = function(event)
 {
-	var f = Titanium.Filesystem.getFile(event.message.file);
+	var f = Ti.Filesystem.getFile(event.message.file);
 	var contents = f.read().toString();
 	
 	// if it looks like jQuery, skip it ... too many warnings that are OK

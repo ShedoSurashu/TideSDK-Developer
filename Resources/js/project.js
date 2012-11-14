@@ -1,9 +1,9 @@
 
 if (typeof(Titanium)=='undefined') Titanium = {};
 
-var TFS = Titanium.Filesystem;
+var TFS = Ti.Filesystem;
 
-Titanium.Project = 
+Ti.Project = 
 {
 	requiredModulesList: ['api','tiapp','tifilesystem','tiplatform','tiui','javascript','tianalytics'],
 	requiredModules:[],
@@ -12,8 +12,8 @@ Titanium.Project =
 	hasAnalytics: function(project)
 	{
 		var hasAnalytics = true;
-		var tiapp = Titanium.Filesystem.getFileStream(project.dir,'tiapp.xml');
-		tiapp.open(Titanium.Filesystem.MODE_READ);
+		var tiapp = Ti.Filesystem.getFileStream(project.dir,'tiapp.xml');
+		tiapp.open(Ti.Filesystem.MODE_READ);
 		var line = tiapp.readLine(true);
 		while (true)
 		{
@@ -56,18 +56,18 @@ Titanium.Project =
 
 		// Read the application manifest for this application and
 		// find all the necessary components.
-		var app = Titanium.API.readApplicationManifest(project.dir +
-			Titanium.Filesystem.getSeparator() + 'manifest');
+		var app = Ti.API.readApplicationManifest(project.dir +
+			Ti.Filesystem.getSeparator() + 'manifest');
 		var deps = app.getDependencies();
 
 		// Get all modules of the same version as the project runtime.
 		var names = [];
-		var modules = Titanium.API.getApplication().getAvailableModules();
+		var modules = Ti.API.getApplication().getAvailableModules();
 		for (var i = 0; i < modules.length; i++)
 		{
 			var module = modules[i];
 
-			if (module.type != Titanium.API.MODULE)
+			if (module.type != Ti.API.MODULE)
 				continue;
 			// Don't include duplicates and modules of a different version.
 			if (module.version != project.runtime || names.indexOf(module.name) != -1)
@@ -87,9 +87,9 @@ Titanium.Project =
 			// If we have an SDK dependency, we always want it to match
 			// the version of the project runtime. Don't preserve any
 			// old version here.
-			if (deps[i].type == Titanium.API.SDK)
+			if (deps[i].type == Ti.API.SDK)
 				this.sdkDependency = project.runtime;
-			if (deps[i].type == Titanium.API.MOBILESDK)
+			if (deps[i].type == Ti.API.MOBILESDK)
 				this.mobileSDKDependency = deps[i].version;
 		}
 	},
@@ -115,7 +115,7 @@ Titanium.Project =
 			// use default if not exists
 			if (!image.exists())
 			{
-				var path = Titanium.App.appURLToPath('app://images');
+				var path = Ti.App.appURLToPath('app://images');
 				image = TFS.getFile(path,'default_app_logo.png')
 			}
 			
@@ -133,7 +133,7 @@ Titanium.Project =
 		manifest+='#desc:'+project.description+'\n';
 		manifest+='#type:'+project.type+'\n';
 		var stream = null;
-		var developerManifest = Titanium.API.getApplication().getManifest();
+		var developerManifest = Ti.API.getApplication().getManifest();
 		for (var i = 0; i < developerManifest.length; i++)
 		{
 			if (developerManifest[i][0] == "#stream")
@@ -217,11 +217,11 @@ Titanium.Project =
 			var manifest = this.writeManifest(project);
 
 			// create dist dir
-			var dist = TFS.getFile(project.dir,'dist',Titanium.platform);
+			var dist = TFS.getFile(project.dir,'dist',Ti.platform);
 			dist.createDirectory(true);
 
 			// create app
-			var app = Titanium.createApp(this.runtimeComponent,dist,project.name,project.appid,install);
+			var app = Ti.createApp(this.runtimeComponent,dist,project.name,project.appid,install);
 
 			// write out new manifest
 			var app_manifest = TFS.getFile(app.base,'manifest');
@@ -246,7 +246,7 @@ Titanium.Project =
 						TFS.asyncCopy(appModules,moduleDest, function()
 						{
 							args.unshift(app.executable.nativePath());
-							var x =  Titanium.Process.createProcess({args: args, env: {"KR_DEBUG": "true"}});
+							var x =  Ti.Process.createProcess({args: args, env: {"KR_DEBUG": "true"}});
 							x.launch();
 							if (x && callback)
 							{
@@ -257,7 +257,7 @@ Titanium.Project =
 					else
 					{
 						args.unshift(app.executable.nativePath());
-						var x = Titanium.Process.createProcess({args: args, env: {"KR_DEBUG": "true"}});
+						var x = Ti.Process.createProcess({args: args, env: {"KR_DEBUG": "true"}});
 						if (x && callback)
 						{
 							callback(x);
@@ -275,7 +275,7 @@ Titanium.Project =
 	
 	getSDKVersions: function(version)
 	{
-		var modules = Titanium.API.getInstalledSDKs();
+		var modules = Ti.API.getInstalledSDKs();
 		var versions = [];
 		var tracker = {};
 		if (modules)
@@ -303,7 +303,7 @@ Titanium.Project =
 	},
 	getMobileSDKVersions: function(version)
 	{
-		var modules = Titanium.API.getInstalledMobileSDKs();
+		var modules = Ti.API.getInstalledMobileSDKs();
 		var versions = [];
 		var tracker = {};
 		if (modules)
@@ -352,7 +352,7 @@ Titanium.Project =
 	{
 		if (line)
 		{
-			var entry = Titanium.Project.parseEntry(line);
+			var entry = Ti.Project.parseEntry(line);
 			if (!entry) return;
 			if (entry.token) 
 				result.properties[entry.key]=entry.value;
@@ -377,12 +377,12 @@ Titanium.Project =
 			properties:{}
 		};
 		var line = manifest.readLine(true);
-		Titanium.Project.addEntry(line,result);
+		Ti.Project.addEntry(line,result);
 		while (true)
 		{
 			line = manifest.readLine();
 			if(!line) break;
-			Titanium.Project.addEntry(line,result);
+			Ti.Project.addEntry(line,result);
 		}
 		return result;
 	},
@@ -397,8 +397,8 @@ Titanium.Project =
 		this.writeInitialManifest(TFS.getFile(options.dir,options.name),options);
 		
 		// write out guid for new project
-		var tiapp = Titanium.Filesystem.getFileStream(options.dir,options.name,'tiapp.xml');
-		tiapp.open(Titanium.Filesystem.MODE_READ);		
+		var tiapp = Ti.Filesystem.getFileStream(options.dir,options.name,'tiapp.xml');
+		tiapp.open(Ti.Filesystem.MODE_READ);		
 		var line = tiapp.readLine(true);
 		var newXML = line + '\n';
 		var inWindowSection = false;
@@ -417,7 +417,7 @@ Titanium.Project =
 			}
 			newXML += line + '\n';
 		}
-		tiapp.open(Titanium.Filesystem.MODE_WRITE);
+		tiapp.open(Ti.Filesystem.MODE_WRITE);
 		tiapp.write(newXML);
 		tiapp.close();
 		
@@ -442,7 +442,7 @@ Titanium.Project =
 		var swfobject = '<script type="text/javascript" src="swfobject-1.5.js"></script>\n';
 		var dojo = '<script type="text/javascript" src="dojo-1.2.3.js"></script>\n';
 		
-		var path = Titanium.App.appURLToPath('app://thirdparty_js');
+		var path = Ti.App.appURLToPath('app://thirdparty_js');
 		if (options.jsLibs)
 		{
 			for (var i=0;i<options.jsLibs.length;i++)
@@ -576,7 +576,7 @@ Titanium.Project =
 		// write out the TIAPP.xml
 		var tiappxml = this.XML_PROLOG;
 		var year = new Date().getFullYear();
-		tiappxml+='<!-- These values are edited/maintained by '+Titanium.App.getName()+' -->\n';
+		tiappxml+='<!-- These values are edited/maintained by '+Ti.App.getName()+' -->\n';
 		tiappxml+=this.makeEntry('id',id);
 		tiappxml+=this.makeEntry('name',name);
 		tiappxml+=this.makeEntry('version','1.0');
@@ -667,14 +667,14 @@ Titanium.Project =
 		}
 
 		var line = manifest.readLine(true);
-		var entry = Titanium.Project.parseEntry(line);
+		var entry = Ti.Project.parseEntry(line);
 		for (var i=0;i<1000;i++)
 		{
 			if (entry == null)
 			{
 				line = manifest.readLine();
 				if (!line || line == null)break;
-				entry = Titanium.Project.parseEntry(line);
+				entry = Ti.Project.parseEntry(line);
 			}
 			if (entry.key.indexOf('appname') != -1)
 			{
@@ -717,8 +717,8 @@ Titanium.Project =
 
 
 
-Titanium.Project.XML_PROLOG = "<?xml version='1.0' encoding='UTF-8'?>\n" +
+Ti.Project.XML_PROLOG = "<?xml version='1.0' encoding='UTF-8'?>\n" +
 	"<ti:app xmlns:ti='http://ti.appcelerator.org'>\n";
 	
-Titanium.Project.XML_EPILOG = "</ti:app>";
+Ti.Project.XML_EPILOG = "</ti:app>";
 	

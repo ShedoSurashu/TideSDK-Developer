@@ -37,8 +37,8 @@ CodeEditor.setupView = function()
 CodeEditor.loadProjectFiles = function()
 {
 	CodeEditor.currentProject = Projects.getProject();
-	var resources = Titanium.Filesystem.getFile(CodeEditor.currentProject.dir,"Resources");
-	sysSep = Titanium.Filesystem.getSeparator();
+	var resources = Ti.Filesystem.getFile(CodeEditor.currentProject.dir,"Resources");
+	sysSep = Ti.Filesystem.getSeparator();
 
 
 	function getRecursiveDirectoryListing(file){
@@ -161,7 +161,7 @@ CodeEditor.edit = function(file)
 
 	
 		selectedFilePath = file;
-		var ofile = Titanium.Filesystem.getFile(file);
+		var ofile = Ti.Filesystem.getFile(file);
 		str = ofile.read();
 		str = str.toString();
 		aceeditor.getSession().setValue(str);
@@ -227,7 +227,7 @@ CodeEditor.edit = function(file)
 var selectedFilePath = '';
 function saveSelectedFile(){
 	str = aceeditor.getSession().getValue();
-	var ofile = Titanium.Filesystem.getFile(selectedFilePath);
+	var ofile = Ti.Filesystem.getFile(selectedFilePath);
 	ofile.write(str);
 }
 

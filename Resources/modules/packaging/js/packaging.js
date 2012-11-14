@@ -65,7 +65,7 @@ PackageProject.pending_callback = null;
 
 for (var c=0;c<PackageProject.worker_max;c++)
 {
-	var compiler = Titanium.Worker.createWorker('app://modules/packaging/js/compiler.js');
+	var compiler = Ti.Worker.createWorker('app://modules/packaging/js/compiler.js');
 	compiler.onmessage = PackageProject.job_complete;
 	PackageProject.workers.push(compiler);
 	compiler.start();
@@ -130,7 +130,7 @@ PackageProject.compileResources = function(dir, progress_callback, progress_comp
 		}
 	};
 		
-	var resources = Titanium.Filesystem.getFile(dir);
+	var resources = Ti.Filesystem.getFile(dir);
 	var jobs = getRecursiveDirectoryListing(resources);
 
 	// reset pending jobs
@@ -173,7 +173,7 @@ PackageProject.compileResources = function(dir, progress_callback, progress_comp
 //
 // add close listener to close emulators if still running
 //
-Titanium.UI.currentWindow.addEventListener(function(name,event)
+Ti.UI.currentWindow.addEventListener(function(name,event)
 {
 	if (name == 'closed')
 	{
@@ -201,7 +201,7 @@ $MQL('l:tidev.projects.row_selected',function(msg)
 	if (msg.payload.activeTab == 'packaging')
 	{
 		PackageProject.currentProject = Projects.getProject();
-		var file = Titanium.Filesystem.getFile(Titanium.App.appURLToPath('modules/packaging/packaging.html'));
+		var file = Ti.Filesystem.getFile(Ti.App.appURLToPath('modules/packaging/packaging.html'));
 		$('#tiui_content_right').get(0).innerHTML = file.read();
 
 		if (PackageProject.currentProject.type == 'mobile' || 
@@ -311,7 +311,7 @@ PackageProject.openResource = function(id)
 	var ln = el.attr('ln');
 	var msg = el.get(0).msg;
 	
-	Titanium.UI.showDialog({
+	Ti.UI.showDialog({
 		'url': 'app://modules/packaging/resource_view.html',
 		'width': 700,
 		'height': 500,
@@ -379,10 +379,10 @@ PackageProject.logReader = function(process,platform,type,filterFunc)
 				var fn = str.substring(a+2,i);
 				var y = str.indexOf(' ',i+1);
 				var line = str.substring(i+1,y);
-				var f = Titanium.Filesystem.getFile(PackageProject.currentProject.dir,'Resources',fn);
+				var f = Ti.Filesystem.getFile(PackageProject.currentProject.dir,'Resources',fn);
 				if (!f.exists())
 				{
-					f = Titanium.Filesystem.getFile(PackageProject.currentProject.dir,'Resources',platform,fn);
+					f = Ti.Filesystem.getFile(PackageProject.currentProject.dir,'Resources',platform,fn);
 				}
 				if (f.exists())
 				{
@@ -543,15 +543,15 @@ PackageProject.logFilterVisible = function(cls,platform)
 PackageProject.setupMobileView = function()
 {
 	var runtime = PackageProject.currentProject.runtime;
-	var sdk = Titanium.Project.getMobileSDKVersions(runtime);
+	var sdk = Ti.Project.getMobileSDKVersions(runtime);
 
 	// set scripts for current sdk version
-	PackageProject.iPhoneEmulatorPath = Titanium.Filesystem.getFile(sdk.getPath(),'/iphone/builder.py');
-	PackageProject.AndroidEmulatorPath = Titanium.Filesystem.getFile(sdk.getPath(),'/android/builder.py');
-	PackageProject.iPhoneProvisioningPath = Titanium.Filesystem.getFile(sdk.getPath(),'iphone/provisioner.py');
-	PackageProject.iPhonePrereqPath = Titanium.Filesystem.getFile(sdk.getPath(),'iphone/prereq.py');
-	PackageProject.AndroidPrereqPath = Titanium.Filesystem.getFile(sdk.getPath(),'android/prereq.py');
-	PackageProject.AndroidAvdPath = Titanium.Filesystem.getFile(sdk.getPath(),'android/avd.py');
+	PackageProject.iPhoneEmulatorPath = Ti.Filesystem.getFile(sdk.getPath(),'/iphone/builder.py');
+	PackageProject.AndroidEmulatorPath = Ti.Filesystem.getFile(sdk.getPath(),'/android/builder.py');
+	PackageProject.iPhoneProvisioningPath = Ti.Filesystem.getFile(sdk.getPath(),'iphone/provisioner.py');
+	PackageProject.iPhonePrereqPath = Ti.Filesystem.getFile(sdk.getPath(),'iphone/prereq.py');
+	PackageProject.AndroidPrereqPath = Ti.Filesystem.getFile(sdk.getPath(),'android/prereq.py');
+	PackageProject.AndroidAvdPath = Ti.Filesystem.getFile(sdk.getPath(),'android/avd.py');
 
 	// initialize ad
 	//$('#mobile_ads').html(TiDev.mobileEmulatorContent);
@@ -634,7 +634,7 @@ PackageProject.setupMobileView = function()
 	});
 	
 
-	if (Titanium.platform != "osx")
+	if (Ti.platform != "osx")
 	{
 		$('#mobile_emulator_iphone').hide();
 		$('#tab_iphone_dev').hide();
@@ -671,7 +671,7 @@ PackageProject.setupMobileView = function()
 	
 	if (PackageProject.currentProject.platforms.ios == true)
 	{		
-		var buildpath = Titanium.Filesystem.getFile(PackageProject.currentProject.dir,'build','iphone');
+		var buildpath = Ti.Filesystem.getFile(PackageProject.currentProject.dir,'build','iphone');
 		if (buildpath.exists() != true)
 		{
 			buildpath.createDirectory();
@@ -910,7 +910,7 @@ PackageProject.setupMobileView = function()
 		});
 		
 		// see what iphone prereqs the user has then drive UI state
-		var x = TiDev.launchPython([Titanium.Filesystem.getFile(PackageProject.iPhonePrereqPath).toString(), 'package']);
+		var x = TiDev.launchPython([Ti.Filesystem.getFile(PackageProject.iPhonePrereqPath).toString(), 'package']);
 		x.setOnRead(function(event)
 		{
 			try
@@ -1209,7 +1209,7 @@ PackageProject.setupMobileView = function()
 		$('#add_dist_location_link').click(function()
 		{
 			var props = {multiple:false,directories:true,files:false};
-			Titanium.UI.currentWindow.openFolderChooserDialog(function(f)
+			Ti.UI.currentWindow.openFolderChooserDialog(function(f)
 			{
 				if (f.length)
 				{
@@ -1235,8 +1235,8 @@ PackageProject.setupMobileView = function()
 			var location = $('#iphone_dist_location').val();
 			var sdk = $('#iphone_distribution_sdk').val();
 			var type = (PackageProject.currentProject.type=='mobile') ? 'iphone' : PackageProject.currentProject.type;
-			Titanium.Analytics.featureEvent(type +'.distribute',{sdk:sdk,appid:PackageProject.currentProject.appid,name:PackageProject.currentProject.name,guid:PackageProject.currentProject.guid,certName:certName});
-			var x = TiDev.launchPython([Titanium.Filesystem.getFile(PackageProject.iPhoneEmulatorPath).toString(),'distribute','"'+sdk+'"', '"'+ PackageProject.currentProject.dir+ '"',PackageProject.currentProject.appid, '"' + PackageProject.currentProject.name+ '"', uuid,'"'+certName+'"','"'+location+'"', deviceFamily]);
+			Ti.Analytics.featureEvent(type +'.distribute',{sdk:sdk,appid:PackageProject.currentProject.appid,name:PackageProject.currentProject.name,guid:PackageProject.currentProject.guid,certName:certName});
+			var x = TiDev.launchPython([Ti.Filesystem.getFile(PackageProject.iPhoneEmulatorPath).toString(),'distribute','"'+sdk+'"', '"'+ PackageProject.currentProject.dir+ '"',PackageProject.currentProject.appid, '"' + PackageProject.currentProject.name+ '"', uuid,'"'+certName+'"','"'+location+'"', deviceFamily]);
 			var buffer = '';
 			x.setOnRead(function(event)
 			{
@@ -1271,8 +1271,8 @@ PackageProject.setupMobileView = function()
 			{
 				var sdk = $('#iphone_device_sdk').val();
 				var type = (PackageProject.currentProject.type=='mobile') ? 'iphone' : PackageProject.currentProject.type;				
-				Titanium.Analytics.featureEvent(type+'.install',{sdk:sdk,guid:PackageProject.currentProject.guid,devName:devName,appid:PackageProject.currentProject.appid,name:PackageProject.currentProject.name});
-				var x = TiDev.launchPython([Titanium.Filesystem.getFile(PackageProject.iPhoneEmulatorPath).toString(),'install','"'+sdk+'"', '"'+ PackageProject.currentProject.dir+ '"',PackageProject.currentProject.appid, '"' + PackageProject.currentProject.name+ '"','"'+uuid+'"', '"'+devName + '"', deviceFamily]);
+				Ti.Analytics.featureEvent(type+'.install',{sdk:sdk,guid:PackageProject.currentProject.guid,devName:devName,appid:PackageProject.currentProject.appid,name:PackageProject.currentProject.name});
+				var x = TiDev.launchPython([Ti.Filesystem.getFile(PackageProject.iPhoneEmulatorPath).toString(),'install','"'+sdk+'"', '"'+ PackageProject.currentProject.dir+ '"',PackageProject.currentProject.appid, '"' + PackageProject.currentProject.name+ '"','"'+uuid+'"', '"'+devName + '"', deviceFamily]);
 				var buffer = '';
 				x.setOnRead(function(event)
 				{
@@ -1328,7 +1328,7 @@ PackageProject.setupMobileView = function()
 		//
 		$('#iphone_simulator_device').change(function()
 		{
-			var x = TiDev.launchPython([Titanium.Filesystem.getFile(PackageProject.iPhonePrereqPath).toString(), 'project']);
+			var x = TiDev.launchPython([Ti.Filesystem.getFile(PackageProject.iPhonePrereqPath).toString(), 'project']);
 			x.setOnRead(function(event)
 			{
 				try
@@ -1373,13 +1373,13 @@ PackageProject.setupMobileView = function()
 		//
 		$('#iphone_launch_fc_button').click(function()
 		{
-			var f = Titanium.Filesystem.getFile(PackageProject.currentProject.dir,'build','iphone');
+			var f = Ti.Filesystem.getFile(PackageProject.currentProject.dir,'build','iphone');
 			if (f.exists())
 			{
 				f.deleteDirectory(true);
 				f.createDirectory();
 			}
-			f = Titanium.Filesystem.getFile(PackageProject.currentProject.dir,'build','android');
+			f = Ti.Filesystem.getFile(PackageProject.currentProject.dir,'build','android');
 			if (f.exists())
 			{
 				f.deleteDirectory(true);
@@ -1418,7 +1418,7 @@ PackageProject.setupMobileView = function()
 				simDevice = 'ipad';
 			}
 			
-			Titanium.Analytics.featureEvent(type+'.simulator',{sdk:sdk,appid:PackageProject.currentProject.appid,name:PackageProject.currentProject.name,guid:PackageProject.currentProject.guid});
+			Ti.Analytics.featureEvent(type+'.simulator',{sdk:sdk,appid:PackageProject.currentProject.appid,name:PackageProject.currentProject.name,guid:PackageProject.currentProject.guid});
 			
 			// kill if still running
 			if (PackageProject.currentIPhonePID != null)
@@ -1428,15 +1428,15 @@ PackageProject.setupMobileView = function()
 				PackageProject.iphoneEmulatorStartDate = null;
 			}
 			
-			PackageProject.mobileCompile(Titanium.Filesystem.getFile(PackageProject.currentProject.dir,"Resources").nativePath(),'iphone',function()
+			PackageProject.mobileCompile(Ti.Filesystem.getFile(PackageProject.currentProject.dir,"Resources").nativePath(),'iphone',function()
 			{
 				
-				PackageProject.currentIPhonePID = TiDev.launchPython([Titanium.Filesystem.getFile(PackageProject.iPhoneEmulatorPath).toString(),'simulator', '"'+sdk+'"','"'+ PackageProject.currentProject.dir+ '"',PackageProject.currentProject.appid, '"' + PackageProject.currentProject.name+ '"', deviceFamily, simDevice]);
+				PackageProject.currentIPhonePID = TiDev.launchPython([Ti.Filesystem.getFile(PackageProject.iPhoneEmulatorPath).toString(),'simulator', '"'+sdk+'"','"'+ PackageProject.currentProject.dir+ '"',PackageProject.currentProject.appid, '"' + PackageProject.currentProject.name+ '"', deviceFamily, simDevice]);
 				PackageProject.logReader(PackageProject.currentIPhonePID,'iphone','simulator');
 				PackageProject.iphoneEmulatorStartDate = new Date();
 				PackageProject.currentIPhonePID.setOnExit(function(event)
 				{
-					Titanium.Analytics.timedEvent('iphone.simulator',PackageProject.iphoneEmulatorStartDate, new Date(),null,{guid:PackageProject.currentProject.guid});
+					Ti.Analytics.timedEvent('iphone.simulator',PackageProject.iphoneEmulatorStartDate, new Date(),null,{guid:PackageProject.currentProject.guid});
 					PackageProject.iphoneEmulatorStartDate = null;
 					PackageProject.currentIPhonePID = null;
 					$('#iphone_launch_button').removeClass('disabled');
@@ -1470,7 +1470,7 @@ PackageProject.setupMobileView = function()
 
 		// show emulator tab and configure listeners
 		// activate android tab if not osx
-		if (Titanium.platform == "osx")
+		if (Ti.platform == "osx")
 		{
 			$('#mobile_emulator_iphone').css('display','block');
 			$('#mobile_emulator_iphone').click();
@@ -1504,7 +1504,7 @@ PackageProject.setupMobileView = function()
 	// check project for android
 	if (PackageProject.currentProject.platforms.android == true)
 	{
-		var buildpath = Titanium.Filesystem.getFile(PackageProject.currentProject.dir,'build','android');
+		var buildpath = Ti.Filesystem.getFile(PackageProject.currentProject.dir,'build','android');
 		if (buildpath.exists() != true)
 		{
 			buildpath.createDirectory();
@@ -1520,7 +1520,7 @@ PackageProject.setupMobileView = function()
 			}
 		}
 		
-		var avdPath = Titanium.Filesystem.getFile(PackageProject.AndroidAvdPath);
+		var avdPath = Ti.Filesystem.getFile(PackageProject.AndroidAvdPath);
 		
 		// if we have the avd script then show fields and get version info
 		if (avdPath.exists())
@@ -1668,9 +1668,9 @@ PackageProject.setupMobileView = function()
 		$('#android_install_on_device_button').click(function()
 		{
 			TiDev.setConsoleMessage('Installing app on device...');
-			Titanium.Analytics.featureEvent('android.install',{name:PackageProject.currentProject.name,appid:PackageProject.currentProject.appid,guid:PackageProject.currentProject.guid});
+			Ti.Analytics.featureEvent('android.install',{name:PackageProject.currentProject.name,appid:PackageProject.currentProject.appid,guid:PackageProject.currentProject.guid});
 			var sdkId = $('#android_version_device').val();			
-			var args = [Titanium.Filesystem.getFile(PackageProject.AndroidEmulatorPath).toString(), "install", '"'+ PackageProject.currentProject.name+ '"','"' +TiDev.androidSDKDir+ '"', '"' + PackageProject.currentProject.dir + '"', '"'+PackageProject.currentProject.appid+'"', '"'+sdkId+'"'];
+			var args = [Ti.Filesystem.getFile(PackageProject.AndroidEmulatorPath).toString(), "install", '"'+ PackageProject.currentProject.name+ '"','"' +TiDev.androidSDKDir+ '"', '"' + PackageProject.currentProject.dir + '"', '"'+PackageProject.currentProject.appid+'"', '"'+sdkId+'"'];
 
 		 	var installAndroid = TiDev.launchPython(args);
 			var buffer = '';
@@ -1699,7 +1699,7 @@ PackageProject.setupMobileView = function()
 		$('#android_key_store_location').click(function()
 		{
 			var props = {multiple:false,directories:false,files:true};
-			Titanium.UI.currentWindow.openFileChooserDialog(function(f)
+			Ti.UI.currentWindow.openFileChooserDialog(function(f)
 			{
 				if (f.length)
 				{
@@ -1715,7 +1715,7 @@ PackageProject.setupMobileView = function()
 		$('#android_location_folder').click(function()
 		{
 			var props = {multiple:false,directories:true,files:false};
-			Titanium.UI.currentWindow.openFolderChooserDialog(function(f)
+			Ti.UI.currentWindow.openFolderChooserDialog(function(f)
 			{
 				if (f.length)
 				{
@@ -1739,11 +1739,11 @@ PackageProject.setupMobileView = function()
 			var sdkId = $('#android_version').val();		
 			if (PackageProject.sendAVD==false)
 			{
-				var args = [Titanium.Filesystem.getFile(PackageProject.AndroidEmulatorPath).toString(), "distribute", '"'+ PackageProject.currentProject.name+ '"','"' +TiDev.androidSDKDir+ '"', '"' + PackageProject.currentProject.dir + '"', '"'+PackageProject.currentProject.appid+'"','"'+keystore+'"','"'+password+'"','"'+alias+'"', '"'+location+'"'];
+				var args = [Ti.Filesystem.getFile(PackageProject.AndroidEmulatorPath).toString(), "distribute", '"'+ PackageProject.currentProject.name+ '"','"' +TiDev.androidSDKDir+ '"', '"' + PackageProject.currentProject.dir + '"', '"'+PackageProject.currentProject.appid+'"','"'+keystore+'"','"'+password+'"','"'+alias+'"', '"'+location+'"'];
 			}	
 			else
 			{
-				var args = [Titanium.Filesystem.getFile(PackageProject.AndroidEmulatorPath).toString(), "distribute", '"'+ PackageProject.currentProject.name+ '"','"' +TiDev.androidSDKDir+ '"', '"' + PackageProject.currentProject.dir + '"', '"'+PackageProject.currentProject.appid+'"','"'+keystore+'"','"'+password+'"','"'+alias+'"', '"'+location+'"', '"'+sdkId+'"'];
+				var args = [Ti.Filesystem.getFile(PackageProject.AndroidEmulatorPath).toString(), "distribute", '"'+ PackageProject.currentProject.name+ '"','"' +TiDev.androidSDKDir+ '"', '"' + PackageProject.currentProject.dir + '"', '"'+PackageProject.currentProject.appid+'"','"'+keystore+'"','"'+password+'"','"'+alias+'"', '"'+location+'"', '"'+sdkId+'"'];
 			}
 		 	var  x = TiDev.launchPython(args);
 			var buffer = '';
@@ -1765,7 +1765,7 @@ PackageProject.setupMobileView = function()
 			});
 			x.launch();
 				
-			Titanium.Analytics.featureEvent('android.distribute',{name:PackageProject.currentProject.name,guid:PackageProject.currentProject.guid,appid:PackageProject.currentProject.appid});
+			Ti.Analytics.featureEvent('android.distribute',{name:PackageProject.currentProject.name,guid:PackageProject.currentProject.guid,appid:PackageProject.currentProject.appid});
 			
 		});
 
@@ -1809,7 +1809,7 @@ PackageProject.setupMobileView = function()
 		});
 
 		// activate android tab if not osx
-		if (Titanium.platform != "osx")
+		if (Ti.platform != "osx")
 		{
 			$('#mobile_emulator_android').click();
 		}
@@ -1852,7 +1852,7 @@ PackageProject.setupMobileView = function()
 		{
 			if ($(this).hasClass('disabled'))return;
 			
-			Titanium.Analytics.featureEvent('android.simulator',{name:PackageProject.currentProject.name,appid:PackageProject.currentProject.appid,guid:PackageProject.currentProject.guid});
+			Ti.Analytics.featureEvent('android.simulator',{name:PackageProject.currentProject.name,appid:PackageProject.currentProject.appid,guid:PackageProject.currentProject.guid});
 			
 			$('#android_kill_button').removeClass('disabled');
 
@@ -1901,7 +1901,7 @@ PackageProject.setupMobileView = function()
 			{
 				var sdkId = $('#android_emulator_sdk').val();		
 				var skin = $('#android_emulator_skins').val();	
-				var args = [Titanium.Filesystem.getFile(PackageProject.AndroidEmulatorPath).toString(), "simulator", '"'+ PackageProject.currentProject.name+ '"','"' +TiDev.androidSDKDir+ '"', '"' + PackageProject.currentProject.dir + '"', '"'+PackageProject.currentProject.appid+'"', '"'+sdkId+'"', '"'+skin+'"'];
+				var args = [Ti.Filesystem.getFile(PackageProject.AndroidEmulatorPath).toString(), "simulator", '"'+ PackageProject.currentProject.name+ '"','"' +TiDev.androidSDKDir+ '"', '"' + PackageProject.currentProject.dir + '"', '"'+PackageProject.currentProject.appid+'"', '"'+sdkId+'"', '"'+skin+'"'];
 				PackageProject.currentAndroidPID = TiDev.launchPython(args);
 				PackageProject.currentAndroidPID.setOnExit(function(event)
 				{
@@ -1921,12 +1921,12 @@ PackageProject.setupMobileView = function()
 				var skin = $('#android_emulator_skins').val();	
 				PackageProject.isAndroidEmulatorRunning = true;
 				PackageProject.androidEmulatorStartDate = new Date();
-				var args = [Titanium.Filesystem.getFile(PackageProject.AndroidEmulatorPath).toString(), "emulator", '"'+ PackageProject.currentProject.name+ '"','"' +TiDev.androidSDKDir+ '"', '"' + PackageProject.currentProject.dir + '"', '"'+PackageProject.currentProject.appid+'"', '"'+sdkId+'"', '"'+skin+'"'];
+				var args = [Ti.Filesystem.getFile(PackageProject.AndroidEmulatorPath).toString(), "emulator", '"'+ PackageProject.currentProject.name+ '"','"' +TiDev.androidSDKDir+ '"', '"' + PackageProject.currentProject.dir + '"', '"'+PackageProject.currentProject.appid+'"', '"'+sdkId+'"', '"'+skin+'"'];
 				PackageProject.currentAndroidEmulatorPID = TiDev.launchPython(args);
 				
 				PackageProject.currentAndroidEmulatorPID.setOnExit(function(event)
 				{
-					Titanium.Analytics.timedEvent('android.simulator',PackageProject.androidEmulatorStartDate, new Date(),null,{guid:PackageProject.currentProject.guid});
+					Ti.Analytics.timedEvent('android.simulator',PackageProject.androidEmulatorStartDate, new Date(),null,{guid:PackageProject.currentProject.guid});
 					PackageProject.androidEmulatorStartDate = null;
 					PackageProject.currentAndroidEmulatorPID = null;
 					PackageProject.isAndroidEmulatorRunning = false;
@@ -2174,13 +2174,13 @@ PackageProject.updateMobileAppId = function(appid)
 PackageProject.uploadIPhoneProvisioningProfile = function(profileType,callback)
 {
 	var props = {multiple:false,types:['mobileprovision']};
-	Titanium.UI.openFileChooserDialog(function(f)
+	Ti.UI.openFileChooserDialog(function(f)
 	{
 		if (f.length)
 		{
 			TiDev.setConsoleMessage('Loading new provisioning profile...');
 			
-		 	var x= TiDev.launchPython([Titanium.Filesystem.getFile(PackageProject.iPhoneProvisioningPath).toString(),'"'+f[0]+'"']);
+		 	var x= TiDev.launchPython([Ti.Filesystem.getFile(PackageProject.iPhoneProvisioningPath).toString(),'"'+f[0]+'"']);
 			x.setOnRead(function(event)
 			{
 				var d = event.data.toString();
@@ -2381,7 +2381,7 @@ PackageProject.setupDesktopView = function()
 //		$('#desktop_package_detail').css('marginLeft','-21px');
 
 		// write out manifest
-		Titanium.Project.writeManifest(PackageProject.currentProject);
+		Ti.Project.writeManifest(PackageProject.currentProject);
 		
 		// write out timanifest 
 		PackageProject.writeTiManifest(PackageProject.currentProject);
@@ -2444,47 +2444,47 @@ PackageProject.setupDesktopView = function()
 			
 			// set desktop packaging path
 			var runtime = PackageProject.currentProject.runtime;
-			var sdk = Titanium.Project.getSDKVersions(runtime);
+			var sdk = Ti.Project.getSDKVersions(runtime);
 			
 			// tibuild.py was renamed to tidebuilder.py in 1.3.0-beta
 			var builder;
-			if (Titanium.UpdateManager.compareVersions(sdk.getVersion(), '1.3.0-beta') < 0)
+			if (Ti.UpdateManager.compareVersions(sdk.getVersion(), '1.3.0-beta') < 0)
 			{
 				builder = 'tibuild.py';
 			} else {
 				builder = 'tidebuilder.py';
 			}
 
-			PackageProject.desktopPackage = Titanium.Filesystem.getFile(sdk.getPath(),builder);
+			PackageProject.desktopPackage = Ti.Filesystem.getFile(sdk.getPath(),builder);
 
 			var dest;
 			switch (command) {
 
 				case 'desktop.launch':
-					dest = Titanium.Filesystem.getFile(PackageProject.currentProject.dir,'dist',Titanium.platform);
+					dest = Ti.Filesystem.getFile(PackageProject.currentProject.dir,'dist',Ti.platform);
 					break;
 
 				case 'desktop.package_bundle':
-					dest = Titanium.Filesystem.getFile(PackageProject.currentProject.dir,'packages',Titanium.platform,'bundle');
+					dest = Ti.Filesystem.getFile(PackageProject.currentProject.dir,'packages',Ti.platform,'bundle');
 					break;
 
 				case 'desktop.package_network':
-					dest = Titanium.Filesystem.getFile(PackageProject.currentProject.dir,'packages',Titanium.platform,'network');
+					dest = Ti.Filesystem.getFile(PackageProject.currentProject.dir,'packages',Ti.platform,'network');
 					break;
 			}
 			if (dest.exists()==false)
 			{
 				dest.createDirectory(true);
 			}
-			var sdkDir = Titanium.Filesystem.getFile(sdk.getPath());
-			var basePath = Titanium.Filesystem.getFile(sdkDir,".." + Titanium.Filesystem.getSeparator(),".." + Titanium.Filesystem.getSeparator(),".." + Titanium.Filesystem.getSeparator());
-			var assets = Titanium.Filesystem.getFile(sdk.getPath());
-			var appdir = Titanium.Filesystem.getFile(PackageProject.currentProject.dir);
+			var sdkDir = Ti.Filesystem.getFile(sdk.getPath());
+			var basePath = Ti.Filesystem.getFile(sdkDir,".." + Ti.Filesystem.getSeparator(),".." + Ti.Filesystem.getSeparator(),".." + Ti.Filesystem.getSeparator());
+			var assets = Ti.Filesystem.getFile(sdk.getPath());
+			var appdir = Ti.Filesystem.getFile(PackageProject.currentProject.dir);
 
 			// write out new manifest based on current modules
-			Titanium.Project.writeManifest(PackageProject.currentProject);
+			Ti.Project.writeManifest(PackageProject.currentProject);
 
-			Titanium.Analytics.featureEvent(command,{sdk:runtime,appid:PackageProject.currentProject.appid,name:PackageProject.currentProject.name,guid:PackageProject.currentProject.guid});
+			Ti.Analytics.featureEvent(command,{sdk:runtime,appid:PackageProject.currentProject.appid,name:PackageProject.currentProject.name,guid:PackageProject.currentProject.guid});
 			PackageProject.desktopAppLaunchDate = new Date();
 
 			var exitMessage;
@@ -2578,7 +2578,7 @@ PackageProject.setupDesktopView = function()
 			});
 			PackageProject.currentAppPID.setOnExit(function(event)
 			{
-				Titanium.Analytics.timedEvent('desktopapp.launch',PackageProject.desktopAppLaunchDate, new Date(),null,{guid:PackageProject.currentProject.guid});
+				Ti.Analytics.timedEvent('desktopapp.launch',PackageProject.desktopAppLaunchDate, new Date(),null,{guid:PackageProject.currentProject.guid});
 				PackageProject.desktopAppLaunchDate = null;
 				PackageProject.currentAppPID = null;
 				$('#launch_kill_button').addClass('disabled');
@@ -2661,8 +2661,8 @@ PackageProject.setupDesktopView = function()
 //
 PackageProject.initializeConsoleWidth = function()
 {
-	var windowWidth = Titanium.UI.currentWindow.getWidth();
-	var windowHeight = Titanium.UI.currentWindow.getHeight();
+	var windowWidth = Ti.UI.currentWindow.getWidth();
+	var windowHeight = Ti.UI.currentWindow.getHeight();
 	var leftWidth = $('#tiui_content_left').width();
 	var rightWidth = windowWidth - leftWidth;	
 	var height = $("#tiui_content_right").height() - 170;
@@ -2733,7 +2733,7 @@ PackageProject.writeTiManifest = function(project)
 	timanifest.appname = project.name;
 	timanifest.appid = project.appid;
 	timanifest.appversion = project.version;
-	timanifest.mid = Titanium.Platform.id;
+	timanifest.mid = Ti.Platform.id;
 	timanifest.publisher = project.publisher;
 	timanifest.url = project.url;
 	timanifest.desc = project.description;
@@ -2763,7 +2763,7 @@ PackageProject.writeTiManifest = function(project)
 		timanifest.platforms.push('linux');
 		linuxTrue = true;
 	}
-	Titanium.Analytics.featureEvent('desktop.package',{win:winTrue,linux:linuxTrue,mac:macTrue,guid:project.guid});
+	Ti.Analytics.featureEvent('desktop.package',{win:winTrue,linux:linuxTrue,mac:macTrue,guid:project.guid});
 
 	timanifest.visibility = visibility;
 
@@ -2774,51 +2774,51 @@ PackageProject.writeTiManifest = function(project)
 	timanifest.guid = project.guid;
 	
 	// see if analytics is enabled
-	var hasAnalytics = Titanium.Project.hasAnalytics(project);
+	var hasAnalytics = Ti.Project.hasAnalytics(project);
 	
 	if (project.type == 'desktop')
 	{
 		timanifest.modules = [];
 
 		// required modules
-		for (var i=0;i<Titanium.Project.requiredModules.length;i++)
+		for (var i=0;i<Ti.Project.requiredModules.length;i++)
 		{
 			// analytics disabled then ignore
-			if (hasAnalytics==false && Titanium.Project.requiredModules[i].name == 'tianalytics')
+			if (hasAnalytics==false && Ti.Project.requiredModules[i].name == 'tianalytics')
 			{
 				continue;
 			}
 
 			var m = {};
-			m.name = Titanium.Project.requiredModules[i].name;			
-			m.version = "" + Titanium.Project.requiredModules[i].version;
+			m.name = Ti.Project.requiredModules[i].name;			
+			m.version = "" + Ti.Project.requiredModules[i].version;
 			m.package = networkRuntime;
 			timanifest.modules.push(m);
 		}
 
 		// write out optional modules
-		for (var c=0;c<Titanium.Project.optionalModules.length;c++)
+		for (var c=0;c<Ti.Project.optionalModules.length;c++)
 		{
-			if (timanifest.appid != 'com.appcelerator.titanium.developer' && Titanium.Project.optionalModules[c].name.indexOf('sdk')!=-1)
+			if (timanifest.appid != 'com.appcelerator.titanium.developer' && Ti.Project.optionalModules[c].name.indexOf('sdk')!=-1)
 				continue;
 
 			var add = true;
 			
-			if (Titanium.Project.optionalModules[c].name == 'ruby')
+			if (Ti.Project.optionalModules[c].name == 'ruby')
 			{
 				if (project['languageModules'].ruby != 'on')
 				{
 					add = false;
 				}
 			}
-			if (Titanium.Project.optionalModules[c].name == 'python')
+			if (Ti.Project.optionalModules[c].name == 'python')
 			{
 				if (project['languageModules'].python != 'on')
 				{
 					add = false;
 				}
 			}
-			if (Titanium.Project.optionalModules[c].name == 'php')
+			if (Ti.Project.optionalModules[c].name == 'php')
 			{
 				if (project['languageModules'].php != 'on')
 				{
@@ -2829,8 +2829,8 @@ PackageProject.writeTiManifest = function(project)
 			if (add ==true)
 			{
 				var m = {};
-				m.name = Titanium.Project.optionalModules[c].name;			
-				m.version = "" + Titanium.Project.optionalModules[c].version;
+				m.name = Ti.Project.optionalModules[c].name;			
+				m.version = "" + Ti.Project.optionalModules[c].version;
 				m.package = networkRuntime;
 				timanifest.modules.push(m);
 			}
@@ -2854,7 +2854,7 @@ PackageProject.copyAppFiles = function(project, callback)
 	try
 	{
 		var resources = TFS.getFile(project.dir,'Resources');		
-		var destDir = Titanium.Filesystem.createTempDirectory();
+		var destDir = Ti.Filesystem.createTempDirectory();
 		var modules = TFS.getFile(project.dir,'modules');
 		var timanifest = TFS.getFile(project.dir,'timanifest');
 		var manifest = TFS.getFile(project.dir,'manifest');
@@ -2925,7 +2925,7 @@ PackageProject.publishDesktopApp = function(destDir,project)
 	TiUI.progressBar.init();
 	TiDev.messageArea.expand();				
 	
-	var url = Titanium.App.getStreamURL(PackageProject.publishURL);
+	var url = Ti.App.getStreamURL(PackageProject.publishURL);
 	var data = {};
 	data.sid = Projects.userSID;
 	data.token = Projects.userToken;
@@ -2933,7 +2933,7 @@ PackageProject.publishDesktopApp = function(destDir,project)
 	data.uidt = Projects.userUIDT;
 
 	url = TiDev.makeURL(url,data);
-	var xhr = Titanium.Network.createHTTPClient();
+	var xhr = Ti.Network.createHTTPClient();
 	var ticket = null;
 	xhr.onreadystatechange = function()
 	{
@@ -2964,8 +2964,8 @@ PackageProject.publishDesktopApp = function(destDir,project)
 		}
 	};
 	xhr.open("POST",url);
-	var zipFile = Titanium.Filesystem.createTempFile();
-	Titanium.Codec.createZip(destDir, zipFile, function() {
+	var zipFile = Ti.Filesystem.createTempFile();
+	Ti.Codec.createZip(destDir, zipFile, function() {
 	  // complete callback
 	  xhr.send(zipFile);
 	});
@@ -3012,7 +3012,7 @@ PackageProject.pollPackagingRequest = function(ticket,guid)
 //
 //  Add listener to resize
 //
-Titanium.UI.currentWindow.addEventListener(function(event)
+Ti.UI.currentWindow.addEventListener(function(event)
 {
 	if(event == 'resized')
 	{

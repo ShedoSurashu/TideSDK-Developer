@@ -24,7 +24,7 @@
  * can be used in Appcelerator Titanium
  *
  */
-Titanium.Facebook = {};
+Ti.Facebook = {};
 
 /**
  * Main API entry point for creating an Facebook Connect API session
@@ -32,14 +32,14 @@ Titanium.Facebook = {};
  * Pass in your applications API key and callback function to receive
  * the facebook session object once the session has been created
  */
-Titanium.Facebook.createSession = function(apikey,cb)
+Ti.Facebook.createSession = function(apikey,cb)
 {
 	this.NOT_LOGGED_IN = 0;
 	this.LOGGED_IN = 1;
 	
 	this.status = this.NOT_LOGGED_IN;
 
-//	var is_desktop = (Titanium.platform == 'osx' || Titanium.platform == 'win32' || Titanium.platform == 'linux');
+//	var is_desktop = (Ti.platform == 'osx' || Ti.platform == 'win32' || Ti.platform == 'linux');
 	var is_desktop = false;
 	
 	var FacebookRestURL = "http://api.facebook.com/restserver.php";
@@ -64,7 +64,7 @@ Titanium.Facebook.createSession = function(apikey,cb)
 
 	this.session = null;
 
-	var db = Titanium.Database.open("ti_fbconnect");
+	var db = Ti.Database.open("ti_fbconnect");
 	db.execute("CREATE TABLE IF NOT EXISTS sessions (apikey TEXT,session_key TEXT,uid TEXT, expires TEXT, secret TEXT, email TEXT)");
 	
 	var rs = db.execute("SELECT * FROM sessions where apikey = ?",apikey);
@@ -156,7 +156,7 @@ Titanium.Facebook.createSession = function(apikey,cb)
 					urlArgs[key]=value;
 				}
 				else {
-					urlArgs[key]=Titanium.JSON.stringify(value);
+					urlArgs[key]=Ti.JSON.stringify(value);
 				}
 			}
 		}
@@ -220,7 +220,7 @@ Titanium.Facebook.createSession = function(apikey,cb)
 	{
 		try
 		{
-			var xhr = Titanium.Network.createHTTPClient();
+			var xhr = Ti.Network.createHTTPClient();
 			xhr.onreadystatechange = function()
 			{
 				if (this.readyState == 4)
@@ -232,7 +232,7 @@ Titanium.Facebook.createSession = function(apikey,cb)
 					{
 						try
 						{
-							response = Titanium.JSON.parse(this.responseText);
+							response = Ti.JSON.parse(this.responseText);
 						}
 						catch(e)
 						{
@@ -391,7 +391,7 @@ Titanium.Facebook.createSession = function(apikey,cb)
 	
 	function showDialog(location,width,height,next,cancel,callback)
 	{
-		// var progress_win = Titanium.UI.createWindow("app://progress.html");
+		// var progress_win = Ti.UI.createWindow("app://progress.html");
 		// progress_win.setHeight(150);
 		// progress_win.setWidth(450);
 		// progress_win.setResizable(false);
@@ -411,7 +411,7 @@ Titanium.Facebook.createSession = function(apikey,cb)
 		// progress_win.open();
 		
 		console.debug(location);
-		var win = Titanium.UI.createWindow(location);
+		var win = Ti.UI.createWindow(location);
 		var pending_email = null;
 		var pending_pass = null;
 		win.setWidth(width);
@@ -476,7 +476,7 @@ Titanium.Facebook.createSession = function(apikey,cb)
 			db.execute("DELETE FROM sessions where apikey = ?",apikey);
 			if (ok)
 			{
-				self.session = Titanium.JSON.parse(vars.session);
+				self.session = Ti.JSON.parse(vars.session);
 				self.session.email = email;
 				self.status = self.LOGGED_IN;
 				db.execute("INSERT INTO sessions VALUES (?,?,?,?,?,?)",apikey,self.session['session_key'],self.session['uid'],self.session['expires'],self.session['secret'],self.session['email']);
@@ -499,7 +499,7 @@ Titanium.Facebook.createSession = function(apikey,cb)
 		if (template_data) data.template_data = template_data;
 		if (body_general) data.body_general = body_general;
 		var p = makeURLParams();
-		p.feed_info = encodeURIComponent(Titanium.JSON.stringify(data));
+		p.feed_info = encodeURIComponent(Ti.JSON.stringify(data));
 		p.feed_target_type = 'self_feed';
 		p.preview = '1';
 		var location = makeURL("/connect/prompt_feed.php?api_key=" + apikey,p);

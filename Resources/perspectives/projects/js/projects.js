@@ -16,7 +16,7 @@ Projects.selectInitialTab = false;
 Projects.dbInitialized = false;
 
 // default runtime version
-Projects.currentRuntimeVersion = Titanium.version;
+Projects.currentRuntimeVersion = Ti.version;
 
 // used to increment new project IDs
 Projects.highestId = 0;
@@ -166,7 +166,7 @@ Projects.createUser = function()
 				Projects.facebookSession.publishFeed('134879989930');
 			}
 			// open post registration page
-			Titanium.Desktop.openURL('http://api.appcelerator.net/p/pages/install-success/developer/'+ encodeURIComponent(Titanium.Platform.id));
+			Ti.Desktop.openURL('http://api.appcelerator.net/p/pages/install-success/developer/'+ encodeURIComponent(Ti.Platform.id));
 		}
 		// show error
 		else
@@ -207,8 +207,8 @@ Projects.setupPostLoginView = function()
 	$('body').css('opacity','0')
 	$('#tiui_header').css('display','block');
 	$('#tiui_content_body').css('top','88px');
-	Titanium.UI.currentWindow.setHeight(620);
-	Titanium.UI.currentWindow.setResizable(true);
+	Ti.UI.currentWindow.setHeight(620);
+	Ti.UI.currentWindow.setResizable(true);
 	$('body').animate({'opacity':'1.0'},1400);
 
 	// setup UI view
@@ -235,7 +235,7 @@ Projects.showLogin = function()
 	$('#tiui_content_body').css('top','0px');
 	
 	// load signup/login page
-	var file = Titanium.Filesystem.getFile(Titanium.App.appURLToPath('perspectives/projects/login_signup.html'));
+	var file = Ti.Filesystem.getFile(Ti.App.appURLToPath('perspectives/projects/login_signup.html'));
 	$('#tiui_content_right').get(0).innerHTML = file.read();
 	
 	// setup buttons
@@ -246,7 +246,7 @@ Projects.showLogin = function()
 	// connect with facebook
 	$("#fbconnect_button").click(function()
 	{
-		Titanium.Facebook.createSession(Projects.facebookAppId,function(fb)
+		Ti.Facebook.createSession(Projects.facebookAppId,function(fb)
 		{
 				fb.login(function(ok,url,vars,email,pass)
 				{
@@ -492,7 +492,7 @@ Projects.showLogin = function()
 	// connect the fb connect login button
 	$('#fbconnect_login_button').click(function()
 	{
-		Titanium.Facebook.createSession(Projects.facebookAppId,function(fb)
+		Ti.Facebook.createSession(Projects.facebookAppId,function(fb)
 		{
 				fb.login(function(ok,url,vars,email,pass)
 				{
@@ -532,8 +532,8 @@ Projects.showLogin = function()
 			$('#reset_password_button').addClass('disabled');
 	});
 
-	Titanium.UI.currentWindow.setResizable(false);
-	Titanium.UI.currentWindow.setHeight(580);
+	Ti.UI.currentWindow.setResizable(false);
+	Ti.UI.currentWindow.setHeight(580);
 	
 };
 
@@ -569,7 +569,7 @@ Projects.setupView = function(options)
 		// 
 		// we have a user record, do auto-login to get tokens
 		//
-		if (Projects.userSID == null && Titanium.Network.online==true)
+		if (Projects.userSID == null && Ti.Network.online==true)
 		{
 			// login success callback
 			function loginOK (resp)
@@ -614,7 +614,7 @@ Projects.setupView = function(options)
 				}
 			};
 			// login
-			TiDev.invokeCloudService(Projects.ssoLoginURL,{un:email,pw:password,mid:Titanium.platform.id},'POST',loginOK, loginFailed);
+			TiDev.invokeCloudService(Projects.ssoLoginURL,{un:email,pw:password,mid:Ti.platform.id},'POST',loginOK, loginFailed);
 			// autoselect Dashboard
 		}
 		else
@@ -865,7 +865,7 @@ Projects.initDB = function()
 			while (projects.isValidRow())
 			{
 				// delete project if its directory is not valid
-				var dir = Titanium.Filesystem.getFile(projects.fieldByName('directory'));
+				var dir = Ti.Filesystem.getFile(projects.fieldByName('directory'));
 				if (!dir.exists())
 				{
 					TiDev.db.execute('DELETE FROM PROJECTS where id = ?',projects.fieldByName('id'));
@@ -914,8 +914,8 @@ Projects.initDB = function()
 					if (requiresPlatformUpdate)
 					{
 						var dir = projects.fieldByName('directory');
-						platforms['ios'] = Titanium.Filesystem.getFile(dir,'build','iphone').exists();
-						platforms['android'] = Titanium.Filesystem.getFile(dir,'build','android').exists();
+						platforms['ios'] = Ti.Filesystem.getFile(dir,'build','iphone').exists();
+						platforms['android'] = Ti.Filesystem.getFile(dir,'build','android').exists();
 					}
 					
 					// format date 
@@ -1000,7 +1000,7 @@ Projects.runMigrations = function()
 	for (var i=0;i<Projects.projectList.length;i++)
 	{
 		var p = Projects.projectList[i];
-		var guid = (p.guid == null)? Titanium.Platform.createUUID() :p.guid;
+		var guid = (p.guid == null)? Ti.Platform.createUUID() :p.guid;
 		var type = (p.type == null)?'desktop':p.type
 		var version = "1.0";
 		var copyright = new Date().getFullYear() + " by " + p['publisher'];
@@ -1026,7 +1026,7 @@ Projects.runMigrations = function()
 Projects.handleImportClick = function()
 {
 	var props = {multiple:false,directories:true,files:false};
-	Titanium.UI.currentWindow.openFolderChooserDialog(function(f)
+	Ti.UI.currentWindow.openFolderChooserDialog(function(f)
 	{
 		if (f.length)
 		{
@@ -1109,14 +1109,14 @@ Projects.handleNewProjectClick = function()
 	$('#tiui_content_submenu').hide();
 	$('#tiui_content_body').css('top','65px');
 	
-	var file = Titanium.Filesystem.getFile(Titanium.App.appURLToPath('perspectives/projects/new_project.html'));
+	var file = Ti.Filesystem.getFile(Ti.App.appURLToPath('perspectives/projects/new_project.html'));
 	$('#tiui_content_right').get(0).innerHTML = file.read();
 
 	// setup ads
 	$('#new_project_ads').html(TiDev.newProjectAdContent);
 
 	// see if we have a mobile sdk
-	var sdks = Titanium.Project.getMobileSDKVersions();
+	var sdks = Ti.Project.getMobileSDKVersions();
 	
 	// reload perms
 	TiDev.permissions = TiDev.getPermissions();
@@ -1163,7 +1163,7 @@ Projects.handleNewProjectClick = function()
 
 	// Determine available project types
 	var projectTypes = '<option value="desktop" selected>Desktop</option><option value="mobile">Mobile</option>';
-	if (Titanium.platform == 'osx')
+	if (Ti.platform == 'osx')
 	{
 		projectTypes += '<option value="ipad">iPad</option><option value="universal">Universal iOS</option>';
 	}
@@ -1175,12 +1175,12 @@ Projects.handleNewProjectClick = function()
 	// project type listener
 	$('#new_project_type').change(function()
 	{
-		var sdkVers = Titanium.Project.getMobileSDKVersions();
-		var sdk = Titanium.Project.getMobileSDKVersions(sdkVers[0]);
+		var sdkVers = Ti.Project.getMobileSDKVersions();
+		var sdk = Ti.Project.getMobileSDKVersions(sdkVers[0]);
 
 		// set scripts for current sdk version
-		iPhonePrereqPath = Titanium.Filesystem.getFile(sdk.getPath(),'iphone/prereq.py');
-		androidPrereqPath = Titanium.Filesystem.getFile(sdk.getPath(),'android/prereq.py');
+		iPhonePrereqPath = Ti.Filesystem.getFile(sdk.getPath(),'iphone/prereq.py');
+		androidPrereqPath = Ti.Filesystem.getFile(sdk.getPath(),'android/prereq.py');
 		
 		if ($(this).val()=='ipad' || $(this).val()=='universal')
 		{	
@@ -1192,7 +1192,7 @@ Projects.handleNewProjectClick = function()
 				TiDev.setConsoleMessage('Checking for iPad prerequisites...');
 				
 				// run ipad prereq check
-				var iPadCheck = TiDev.launchPython([Titanium.Filesystem.getFile(iPhonePrereqPath).toString(),'project']);
+				var iPadCheck = TiDev.launchPython([Ti.Filesystem.getFile(iPhonePrereqPath).toString(),'project']);
 				iPadCheck.setOnRead(function(event)
 				{
 					var d = event.data.toString();
@@ -1231,7 +1231,7 @@ Projects.handleNewProjectClick = function()
 			{
 				Projects.hasRunMobileCheck = true;
 				
-				if (Titanium.platform != 'osx')
+				if (Ti.platform != 'osx')
 				{
 					TiDev.setConsoleMessage('Checking for Android prerequisites...');
 					checkAndroid();
@@ -1241,7 +1241,7 @@ Projects.handleNewProjectClick = function()
 					TiDev.setConsoleMessage('Checking for iOS prerequisites...');
 					
 					// run iphone prereq check
-					var iPhoneCheck = TiDev.launchPython([Titanium.Filesystem.getFile(iPhonePrereqPath).toString(),'project']);
+					var iPhoneCheck = TiDev.launchPython([Ti.Filesystem.getFile(iPhonePrereqPath).toString(),'project']);
 					iPhoneCheck.setOnExit(function(event)
 					{
 						var e = iPhoneCheck.getExitCode();
@@ -1298,7 +1298,7 @@ Projects.handleNewProjectClick = function()
 					
 					}
 					
-					var androidCheck = TiDev.launchPython([Titanium.Filesystem.getFile(androidPrereqPath).toString(),'project']);
+					var androidCheck = TiDev.launchPython([Ti.Filesystem.getFile(androidPrereqPath).toString(),'project']);
 					var dir = null;
 					androidCheck.setOnRead(function(event)
 					{
@@ -1335,7 +1335,7 @@ Projects.handleNewProjectClick = function()
 							if (confirm('Android SDK 1.6 was not found.  If it is installed, can you provide the location?'))
 							{
 								var props = {multiple:false,directories:true,files:false};
-								Titanium.UI.currentWindow.openFolderChooserDialog(function(f)
+								Ti.UI.currentWindow.openFolderChooserDialog(function(f)
 								{
 									if (f.length)
 									{
@@ -1425,7 +1425,7 @@ Projects.handleNewProjectClick = function()
 	$('#new_project_location_icon').click(function()
 	{
 		var props = {multiple:false,directories:true,files:false};
-		Titanium.UI.currentWindow.openFolderChooserDialog(function(f)
+		Ti.UI.currentWindow.openFolderChooserDialog(function(f)
 		{
 			if (f.length)
 			{
@@ -1492,7 +1492,7 @@ Projects.handleNewProjectClick = function()
 	
 	
 	// populate select
-	var versions = Titanium.Project.getSDKVersions();
+	var versions = Ti.Project.getSDKVersions();
 	var html = '';
 	for (var i=0;i<versions.length;i++)
 	{
@@ -1512,7 +1512,7 @@ Projects.handleNewProjectClick = function()
 			$('#new_project_php').attr('disabled','true');
 			
 			// populate select
-			var versions = Titanium.Project.getMobileSDKVersions();
+			var versions = Ti.Project.getMobileSDKVersions();
 			var html = '';
 			for (var i=0;i<versions.length;i++)
 			{
@@ -1524,7 +1524,7 @@ Projects.handleNewProjectClick = function()
 		else
 		{
 			// populate select
-			var versions = Titanium.Project.getSDKVersions();
+			var versions = Ti.Project.getSDKVersions();
 			var html = '';
 			for (var i=0;i<versions.length;i++)
 			{
@@ -1572,7 +1572,7 @@ Projects.importProject = function(f)
 	stream.open();
 	for (var line = stream.readLine(); line != null; line = stream.readLine())
 	{
-		var entry = Titanium.Project.parseEntry(line.toString());
+		var entry = Ti.Project.parseEntry(line.toString());
 		if (entry == null)
 			continue;
 
@@ -1657,7 +1657,7 @@ Projects.importProject = function(f)
 	var versions = null;
 	if (options.type == 'desktop')
 	{
-		var versions = Titanium.Project.getSDKVersions();
+		var versions = Ti.Project.getSDKVersions();
 		if (versions.length == 0)
 		{
 			alert('You are importing a desktop project, but no Desktop SDK versions exist on your system');
@@ -1667,7 +1667,7 @@ Projects.importProject = function(f)
 	}
 	else 
 	{
-		var versions = Titanium.Project.getMobileSDKVersions();
+		var versions = Ti.Project.getMobileSDKVersions();
 		if (versions.length == 0)
 		{
 			alert('You are importing a '+options.type + ' project, but no Mobile SDK versions exist on your system');
@@ -1675,13 +1675,13 @@ Projects.importProject = function(f)
 		}
 		// TODO: Allow import support as a universal
 		// see if ipad is an option
-		if (Titanium.platform == 'osx' && Projects.hasIPad==false)
+		if (Ti.platform == 'osx' && Projects.hasIPad==false)
 		{
-			var sdkVers = Titanium.Project.getMobileSDKVersions();
-			var sdk = Titanium.Project.getMobileSDKVersions(sdkVers[0]);
-			iPhonePrereqPath = Titanium.Filesystem.getFile(sdk.getPath(),'iphone/prereq.py');
+			var sdkVers = Ti.Project.getMobileSDKVersions();
+			var sdk = Ti.Project.getMobileSDKVersions(sdkVers[0]);
+			iPhonePrereqPath = Ti.Filesystem.getFile(sdk.getPath(),'iphone/prereq.py');
 
-			var iPadCheck = TiDev.launchPython([Titanium.Filesystem.getFile(iPhonePrereqPath).toString(),'project']);
+			var iPadCheck = TiDev.launchPython([Ti.Filesystem.getFile(iPhonePrereqPath).toString(),'project']);
 			iPadCheck.setOnRead(function(event)
 			{
 				var d = event.data.toString();
@@ -1726,7 +1726,7 @@ Projects.importProject = function(f)
 			options.runtime = versions[0];
 
 		Projects.createProject(options);
-		Titanium.Analytics.featureEvent('project.import',options);
+		Ti.Analytics.featureEvent('project.import',options);
 		TiDev.setConsoleMessage('Your project has been imported', 2000);
 		
 	}
@@ -1746,11 +1746,11 @@ Projects.createProject = function(options, createProjectFiles)
 	if (options.url === undefined)
 		options.url = '';
 	if (options.publisher === undefined)
-		options.publisher = Titanium.Platform.username;
+		options.publisher = Ti.Platform.username;
 	if (options.image === undefined)
 		options.image = 'default_app_logo.png';
 	if (options.guid === undefined)
-		options.guid = Titanium.Platform.createUUID();
+		options.guid = Ti.Platform.createUUID();
 	if (options.description === undefined)
 		options.description = 'No description provided';
 	if (options.version === undefined)
@@ -1786,7 +1786,7 @@ Projects.createProject = function(options, createProjectFiles)
 	// only record event if we are creating project files
 	if (createProjectFiles == true)
 	{
-		Titanium.Analytics.featureEvent('project.create',record);
+		Ti.Analytics.featureEvent('project.create',record);
 	}
 
 	// create project directories
@@ -1796,7 +1796,7 @@ Projects.createProject = function(options, createProjectFiles)
 		result.success = false;
 		if (options.type == 'desktop')
 		{
-		 	result = Titanium.Project.create(options);
+		 	result = Ti.Project.create(options);
 			if (result.success==true)
 			{
 				result = createDBRecord();
@@ -1807,9 +1807,9 @@ Projects.createProject = function(options, createProjectFiles)
 		else
 		{
 			// see if directory already exists
-			if (Titanium.Filesystem.getFile(options.dir,options.name).exists() == true)
+			if (Ti.Filesystem.getFile(options.dir,options.name).exists() == true)
 			{
-				result.message = 'Directory already exists: ' +Titanium.Filesystem.getFile(options.dir,options.name).toString();
+				result.message = 'Directory already exists: ' +Ti.Filesystem.getFile(options.dir,options.name).toString();
 				setMessage();
 			}
 			else
@@ -1827,12 +1827,12 @@ Projects.createProject = function(options, createProjectFiles)
 				TiDev.setConsoleMessage('Creating '+options.type+' project: ' + options.name);
 
 				// determine path to project create script
-				var sdk = Titanium.Project.getMobileSDKVersions(options.runtime);
-				var path = Titanium.Filesystem.getFile(sdk.getPath(),'project.py');
-				args.unshift(Titanium.Filesystem.getFile(path).toString());
+				var sdk = Ti.Project.getMobileSDKVersions(options.runtime);
+				var path = Ti.Filesystem.getFile(sdk.getPath(),'project.py');
+				args.unshift(Ti.Filesystem.getFile(path).toString());
 				var	x = TiDev.launchPython(args);
 				var errorMessage = "";
-				x.stderr.addEventListener(Titanium.READ, function(event)
+				x.stderr.addEventListener(Ti.READ, function(event)
 				{
 					errorMessage += event.data.toString();
 				});
@@ -1849,7 +1849,7 @@ Projects.createProject = function(options, createProjectFiles)
 						result['success'] = true;
 						options.image = 'appicon.png';
 						record.image = 'appicon.png';
-						Titanium.Project.createMobileResources(options);
+						Ti.Project.createMobileResources(options);
 						setMessage();
 						createDBRecord();
 						writeAppTextFiles();
@@ -1870,8 +1870,8 @@ Projects.createProject = function(options, createProjectFiles)
 	
 	function writeAppTextFiles()
 	{
-		var license = Titanium.Filesystem.getFile(options.dir,options.name,'LICENSE.txt');
-		var changelog = Titanium.Filesystem.getFile(options.dir,options.name,'CHANGELOG.txt');
+		var license = Ti.Filesystem.getFile(options.dir,options.name,'LICENSE.txt');
+		var changelog = Ti.Filesystem.getFile(options.dir,options.name,'CHANGELOG.txt');
 		license.write('Place your license text here.  This file will be incorporated with your app at package time.');
 		changelog.write('Place your change log text here.  This file will be incorporated with your app at package time.');
 		
@@ -1895,7 +1895,7 @@ Projects.createProject = function(options, createProjectFiles)
 		// add name to dir if new project
 		if (createProjectFiles == true)
 		{
-			record['dir'] = Titanium.Filesystem.getFile(options.dir,options.name).toString();
+			record['dir'] = Ti.Filesystem.getFile(options.dir,options.name).toString();
 		}
 
 		var result = {};

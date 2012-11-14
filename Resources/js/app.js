@@ -1,6 +1,6 @@
-var TFS = Titanium.Filesystem;
+var TFS = Ti.Filesystem;
 
-Titanium.AppCreator = {
+Ti.AppCreator = {
 	
 	osx: function(runtime,destination,name,appid,install)
 	{
@@ -165,7 +165,7 @@ Titanium.AppCreator = {
 };
 
 
-Titanium.createApp = function(runtimeComponent,destination,name,appid,install)
+Ti.createApp = function(runtimeComponent,destination,name,appid,install)
 {
 	// Figure out where the asssets are. In older versions they were in
 	// <runtime>/template, but in later versions they can be found in the
@@ -173,11 +173,11 @@ Titanium.createApp = function(runtimeComponent,destination,name,appid,install)
 	var assetsDir = TFS.getFile(runtimeComponent.getPath(), "template");
 	if (!assetsDir.exists())
 	{
-		var components = Titanium.API.getApplication().getAvailableComponents();
+		var components = Ti.API.getApplication().getAvailableComponents();
 		for (var i = 0; i < components.length; i++)
 		{
 			var c = components[i];
-			if (c.getType() == Titanium.API.SDK &&
+			if (c.getType() == Ti.API.SDK &&
 				c.getVersion() == runtimeComponent.getVersion())
 			{
 				assetsDir = TFS.getFile(components[i].getPath());
@@ -187,7 +187,7 @@ Titanium.createApp = function(runtimeComponent,destination,name,appid,install)
 	}
 
 	install = (typeof(install)=='undefined') ? true : install;
-	var platform = Titanium.platform;
-	var fn = Titanium.AppCreator[platform];
+	var platform = Ti.platform;
+	var fn = Ti.AppCreator[platform];
 	return fn(runtime,destination,name,appid,install);
 };

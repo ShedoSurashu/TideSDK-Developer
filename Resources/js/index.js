@@ -13,7 +13,7 @@ TiDev.moduleCount = 0;
 TiDev.perspectiveCount = 0;
 
 // global db var
-TiDev.db = Titanium.Database.open("TideSDK-Developer");
+TiDev.db = Ti.Database.open("TideSDK-Developer");
 
 // track active perspective and subtab
 TiDev.activePerspective = {};
@@ -23,7 +23,7 @@ TiDev.activeSubtab = {};
 TiDev.cloudRequestRejected = 'Cloud Authentication Failed.  Make sure you are on-line';
 
 // global notification object
-TiDev.notification = Titanium.Notification.createNotification(window)
+TiDev.notification = Ti.Notification.createNotification(window)
 
 // android SDK dir
 TiDev.androidSDKDir = null;
@@ -135,7 +135,7 @@ TiDev.loadResourceFiles = function(array,rootDir)
 	for (var i=0;i<array.length;i++)
 	{
 		// JS
-		var jsFile = Titanium.Filesystem.getFile(array[i],'js',  array[i].name() + '.js');
+		var jsFile = Ti.Filesystem.getFile(array[i],'js',  array[i].name() + '.js');
 		if (jsFile.exists())
 		{
 			var jsEl = document.createElement('script');
@@ -145,7 +145,7 @@ TiDev.loadResourceFiles = function(array,rootDir)
 		}
 		
 		// CSS
-		var cssFile =  Titanium.Filesystem.getFile(array[i],'css',  array[i].name() + '.css');
+		var cssFile =  Ti.Filesystem.getFile(array[i],'css',  array[i].name() + '.css');
 		if (cssFile.exists())
 		{
 			var cssEl = document.createElement('link');
@@ -337,7 +337,7 @@ TiDev.perspectiveChange = function(idx)
 
 		if (analytics_event_from != undefined) // avoid firing during initialization
 		{
-			Titanium.Analytics.navEvent(analytics_event_from, analytics_event_to);		
+			Ti.Analytics.navEvent(analytics_event_from, analytics_event_to);		
 		}
 		// add subtabs tabs
 		if (activeIdx != -1)
@@ -375,7 +375,7 @@ TiDev.perspectiveChange = function(idx)
 	// show start page if exists
 	if (TiDev.activePerspective.html && activeIdx == -1)
 	{
-		var file = Titanium.Filesystem.getFile(Titanium.App.appURLToPath('perspectives/' + TiDev.activePerspective.name + '/'+ TiDev.activePerspective.html));
+		var file = Ti.Filesystem.getFile(Ti.App.appURLToPath('perspectives/' + TiDev.activePerspective.name + '/'+ TiDev.activePerspective.html));
 		$('#tiui_content_right').get(0).innerHTML = file.read();	
 	}
 
@@ -415,7 +415,7 @@ TiDev.subtabChange = function(idx, lognav)
 		// set nav analytics data
 		var analytics_nav_from = TiDev.activePerspective.name.concat('.',TiDev.activeSubtab.name);
 		var analytics_nav_to = TiDev.activePerspective.name.concat('.',TiDev.activePerspective.views[idx].name);
-		Titanium.Analytics.navEvent(analytics_nav_from, analytics_nav_to);
+		Ti.Analytics.navEvent(analytics_nav_from, analytics_nav_to);
 	}
 	
 	// call blur on 
@@ -440,7 +440,7 @@ TiDev.subtabChange = function(idx, lognav)
 	{
 		fireLoad =true;
 	}
-	var file = Titanium.Filesystem.getFile(Titanium.App.appURLToPath('modules/' + TiDev.activeSubtab.name + '/' +TiDev.activeSubtab.html));
+	var file = Ti.Filesystem.getFile(Ti.App.appURLToPath('modules/' + TiDev.activeSubtab.name + '/' +TiDev.activeSubtab.html));
 	
 	$('#tiui_content_right').get(0).innerHTML = file.read();
 	
@@ -538,7 +538,7 @@ TiDev.init = function()
 	TiDev.showDefaultSystemMessage();
 
 	// load perspectives 
-	var perspectivesDir  = Titanium.Filesystem.getFile(Titanium.App.appURLToPath('app://perspectives'));
+	var perspectivesDir  = Ti.Filesystem.getFile(Ti.App.appURLToPath('app://perspectives'));
 	var perspectives = perspectivesDir.getDirectoryListing();
 	for (var i=0;i<perspectives.length;i++)
 	{
@@ -552,7 +552,7 @@ TiDev.init = function()
 	
 	
 	// load modules
-	var modulesDir  = Titanium.Filesystem.getFile(Titanium.App.appURLToPath('app://modules'));
+	var modulesDir  = Ti.Filesystem.getFile(Ti.App.appURLToPath('app://modules'));
 	var modules = modulesDir.getDirectoryListing();
 	var moduleCount = 0;
 	for (var i=0;i<modules.length;i++)
@@ -587,12 +587,12 @@ TiDev.init = function()
 
 TiDev.needsTotalReinstall = function()
 {
-	if (Titanium.platform != "win32")
+	if (Ti.platform != "win32")
 		return false;
 
 	// If there is a runtime later than 0.7 installed, then the
 	// appropriate version of the CRT should be installed already.
-	var runtimes = Titanium.API.getInstalledRuntimes();
+	var runtimes = Ti.API.getInstalledRuntimes();
 	for (var i = 0; i < runtimes.length; i++)
 	{
 		var version = runtimes[i].getVersion();
@@ -616,30 +616,30 @@ TiDev.needsTotalReinstall = function()
 
 TiDev.totalReinstall = function()
 {
-	if (confirm(Titanium.App.getName()+" needs to udpate some components " +
+	if (confirm(Ti.App.getName()+" needs to udpate some components " +
 		"on your system. A total reinstall is required. " +
-		"Exit "+Titanium.App.getName()+" and go to the download page?"))
+		"Exit "+Ti.App.getName()+" and go to the download page?"))
 	{
-		Titanium.Desktop.openURL("http://www.appcelerator.com/download/");
-		Titanium.App.exit();
+		Ti.Desktop.openURL("http://www.appcelerator.com/download/");
+		Ti.App.exit();
 	}
 }
 
 //
 // Register for App Updates
 //
-Titanium.UpdateManager.onupdate = function(details)
+Ti.UpdateManager.onupdate = function(details)
 {
 	TiDev.messageArea.setCollapsedWidth('390px');
-	TiDev.messageArea.setDefaultMessage('New '+Titanium.App.getName()+' available (version ' + details.version + '). <span id="sdk_download_link" style="text-decoration:underline">Click to download</span>',
+	TiDev.messageArea.setDefaultMessage('New '+Ti.App.getName()+' available (version ' + details.version + '). <span id="sdk_download_link" style="text-decoration:underline">Click to download</span>',
 	function()
 	{
 		$('#sdk_download_link').click(function()
 		{
 			if (!TiDev.needsTotalReinstall())
 			{
-				TiDev.messageArea.setMessage('Installing new '+Titanium.App.getName()+'...');
-				Titanium.UpdateManager.installAppUpdate(details, function()
+				TiDev.messageArea.setMessage('Installing new '+Ti.App.getName()+'...');
+				Ti.UpdateManager.installAppUpdate(details, function()
 				{
 					TiDev.showDefaultSystemMessage();
 				});
@@ -661,7 +661,7 @@ Titanium.UpdateManager.onupdate = function(details)
 //
 // Register SDK Update listeners
 //
-Titanium.UpdateManager.startMonitor(['sdk'],function(details)
+Ti.UpdateManager.startMonitor(['sdk'],function(details)
 {
 	
 	switch(details.guid)
@@ -670,14 +670,14 @@ Titanium.UpdateManager.startMonitor(['sdk'],function(details)
 		/*
 		case "05645B49-C629-4D8F-93AF-F1CF83200E34":
 		{
-			TiDev.showSDKAvailableMessage(Titanium.API.MOBILESDK,'Mobile',details);
+			TiDev.showSDKAvailableMessage(Ti.API.MOBILESDK,'Mobile',details);
 			break;
 		}
 		*/
 		// desktop
 		case "FF71038E-3CD6-40EA-A1C2-CFEE1D284CEA":
 		{
-			TiDev.showSDKAvailableMessage(Titanium.API.SDK,'Desktop',details);
+			TiDev.showSDKAvailableMessage(Ti.API.SDK,'Desktop',details);
 			break;
 		}
 	}
@@ -694,7 +694,7 @@ TiDev.showSDKAvailableMessage = function(type,msg, details)
 	{
 		$('#sdk_download_link').click(function()
 		{
-			if (type == Titanium.API.SDK)
+			if (type == Ti.API.SDK)
 			{
 				if (TiDev.needsTotalReinstall())
 				{
@@ -705,13 +705,13 @@ TiDev.showSDKAvailableMessage = function(type,msg, details)
 				var children = details.children;
 				if (children)
 				{
-					var ar = [Titanium.API.createDependency(type,details.name,details.version)];
+					var ar = [Ti.API.createDependency(type,details.name,details.version)];
 					for (var i=0;i<children.length;i++)
 					{
-						var t = Titanium.API.componentGUIDToComponentType(children[i].guid);
-						ar.push(Titanium.API.createDependency(t,children[i].name,children[i].version));
+						var t = Ti.API.componentGUIDToComponentType(children[i].guid);
+						ar.push(Ti.API.createDependency(t,children[i].name,children[i].version));
 					}
-					Titanium.UpdateManager.install(ar,function()
+					Ti.UpdateManager.install(ar,function()
 					{
 						TiDev.showDefaultSystemMessage();
 					});
@@ -719,7 +719,7 @@ TiDev.showSDKAvailableMessage = function(type,msg, details)
 			}
 			else
 			{	
-				Titanium.UpdateManager.install([Titanium.API.createDependency(type,details.name,details.version)], function()
+				Ti.UpdateManager.install([Ti.API.createDependency(type,details.name,details.version)], function()
 				{
 					TiDev.showDefaultSystemMessage();
 				});
@@ -801,11 +801,11 @@ $(document).ready(function()
 	TiDev.init();
 
 	// hide/show top-level controls based on window size
-	Titanium.UI.currentWindow.addEventListener(function(event)
+	Ti.UI.currentWindow.addEventListener(function(event)
 	{
 		if(event == 'resized')
 		{
-			var size = Titanium.UI.currentWindow.getWidth();
+			var size = Ti.UI.currentWindow.getWidth();
 			var messageWidth = $('#tiui_message_area').width();
 			if ((size - messageWidth) < 390)
 			{
@@ -835,14 +835,14 @@ $(document).ready(function()
 		if (answer)
 		{
 			TiDev.db.execute('DELETE FROM USERS');
-			Titanium.App.exit();
+			Ti.App.exit();
 		}
 	});
 	
 	//
 	// check initial network status
 	//
-	if (Titanium.Network.online == true)
+	if (Ti.Network.online == true)
 	{
 		$('#tiui_signal_on').css('display','inline');
 		$('#tiui_signal_off').css('display','none');
@@ -859,7 +859,7 @@ $(document).ready(function()
 	// 
 	$('#learn_button').click(function()
 	{
-		var win = Titanium.UI.createWindow('app://feedback.html');
+		var win = Ti.UI.createWindow('app://feedback.html');
 		win.setHeight(300);
 		win.setWidth(430);
 		win.setResizable(false);
@@ -873,11 +873,11 @@ $(document).ready(function()
 	});
 	*/
 	// set title
-	document.title = Titanium.App.getName() + " (" + Titanium.App.getVersion() + ")";
-	Titanium.API.addEventListener(Titanium.APP_EXIT, function(e) {
+	document.title = Ti.App.getName() + " (" + Ti.App.getVersion() + ")";
+	Ti.API.addEventListener(Ti.APP_EXIT, function(e) {
 		// Workaround for endless update loop
-		var appData = Titanium.Filesystem.getApplicationDataDirectory();
-		var updateFile = Titanium.Filesystem.getFile(appData, '.update');
+		var appData = Ti.Filesystem.getApplicationDataDirectory();
+		var updateFile = Ti.Filesystem.getFile(appData, '.update');
 		if (updateFile.exists()) {
 			updateFile.deleteFile();
 		}
@@ -941,7 +941,7 @@ TiDev.onlineListenerFired = false;
 // add network connnectivity listener
 //
 /*
-Titanium.Network.addConnectivityListener(function(online)
+Ti.Network.addConnectivityListener(function(online)
 {
 	TiDev.onlineListenerFired  = true;
 	$MQ('l:tidev.netchange',{online:online});
@@ -969,7 +969,7 @@ TiDev.invokeCloudService = function(name,data,type,sCallback,fCallback)
 {	
 	
 	// if offline, don't attempt
-	if (Titanium.Network.online == false)
+	if (Ti.Network.online == false)
 	{
 		$('#tiui_cloud_on').css('display','none');
 		$('#tiui_cloud_off').css('display','inline');
@@ -980,7 +980,7 @@ TiDev.invokeCloudService = function(name,data,type,sCallback,fCallback)
 		return;
 	}
 
-	var url = Titanium.App.getStreamURL(name);
+	var url = Ti.App.getStreamURL(name);
 	
 	var type = (type)?type:'POST';
 
@@ -990,15 +990,15 @@ TiDev.invokeCloudService = function(name,data,type,sCallback,fCallback)
 	}
 	
 	// always pass MID
-	data.mid = Titanium.Platform.id;
+	data.mid = Ti.Platform.id;
 	
 	// set timeout low if the online event hasn't fired and we are logging (should only happen once)
-	var timeout = (name == 'sso-login' && !Titanium.Network.online && TiDev.onlineListenerFired==false)?3000:10000;
+	var timeout = (name == 'sso-login' && !Ti.Network.online && TiDev.onlineListenerFired==false)?3000:10000;
 	
 	// xhr auth (for packaging services)
 	function xhrAuth(data)
 	{
-		var url = Titanium.App.getStreamURL("sso-login");	
+		var url = Ti.App.getStreamURL("sso-login");	
 		var qs = '';
 		for (var p in data)
 		{
@@ -1006,7 +1006,7 @@ TiDev.invokeCloudService = function(name,data,type,sCallback,fCallback)
 			qs+=p+'='+encodeURIComponent(v)+'&';
 		}
 		// this is asynchronous
-		var xhr = Titanium.Network.createHTTPClient();
+		var xhr = Ti.Network.createHTTPClient();
 		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		xhr.open("POST",url);
 		xhr.send(qs);	
@@ -1020,7 +1020,7 @@ TiDev.invokeCloudService = function(name,data,type,sCallback,fCallback)
 		data.uid = String(Projects.userUID);
 		data.uidt = Projects.userUIDT;
 
-		var xhr = Titanium.Network.createHTTPClient();
+		var xhr = Ti.Network.createHTTPClient();
 		xhr.onreadystatechange = function()
 		{
 			if (this.readyState == 4)
@@ -1114,8 +1114,8 @@ TiDev.invokeCloudService = function(name,data,type,sCallback,fCallback)
 	else
 	{
 		// try to login
-		var u = Titanium.App.getStreamURL('sso-login');
-		var d = {mid:Titanium.Platform.id};
+		var u = Ti.App.getStreamURL('sso-login');
+		var d = {mid:Ti.Platform.id};
 		
 		// do we already have the email/password
 		if (UserProfile.email && UserProfile.password)
@@ -1136,7 +1136,7 @@ TiDev.invokeCloudService = function(name,data,type,sCallback,fCallback)
 		}
 
 		// try to login
-		var xhr = Titanium.Network.createHTTPClient();
+		var xhr = Ti.Network.createHTTPClient();
 		xhr.onreadystatechange = function()
 		{
 			if (this.readyState == 4)
@@ -1277,7 +1277,7 @@ TiDev.makeURL = function(base,params)
 TiDev.track = function(name,data)
 {
 	data = (typeof(data)!='undefined') ? swiss.toJSON(data) : null;
-	Titanium.Analytics.addEvent(name,data);
+	Ti.Analytics.addEvent(name,data);
 };
 
 //
@@ -1428,14 +1428,14 @@ TiDev.launchPython = function(args)
 	var process = null;
 	console.log(args);
 	
-	if (Titanium.platform == "win32") {
+	if (Ti.platform == "win32") {
 		args.unshift("python.exe");
 	}
 	else
 	{
 		args.unshift('python')
 	}
-	return Titanium.Process.createProcess(args);
+	return Ti.Process.createProcess(args);
 };
 
 TiDev.statusBarTimer = null;
@@ -1466,10 +1466,10 @@ TiDev.setStatusBarMessage = function(message,action,timeout)
 };
 TiDev.validateAndroidSDK = function(sdkDir, callback)
 {
-	var addons = Titanium.Filesystem.getFile(sdkDir, "add-ons");
-	var platforms = Titanium.Filesystem.getFile(sdkDir, "platforms");
-	var tools = Titanium.Filesystem.getFile(sdkDir, "tools");
-	var platformTools = Titanium.Filesystem.getFile(sdkDir, 'platform-tools');
+	var addons = Ti.Filesystem.getFile(sdkDir, "add-ons");
+	var platforms = Ti.Filesystem.getFile(sdkDir, "platforms");
+	var tools = Ti.Filesystem.getFile(sdkDir, "tools");
+	var platformTools = Ti.Filesystem.getFile(sdkDir, 'platform-tools');
 	
 	var isSDK = addons.exists() && platforms.exists() && tools.exists();
 	if (!isSDK)
@@ -1480,16 +1480,16 @@ TiDev.validateAndroidSDK = function(sdkDir, callback)
 	
 	var adb = "adb";
 	var android = "android";
-	if (Titanium.platform == "win32") {
+	if (Ti.platform == "win32") {
 		adb += ".exe";
 		android += ".bat";
 	}
 	
-	var adbFile = Titanium.Filesystem.getFile(tools, adb);
-	var androidFile = Titanium.Filesystem.getFile(tools, android);
+	var adbFile = Ti.Filesystem.getFile(tools, adb);
+	var androidFile = Ti.Filesystem.getFile(tools, android);
 	if (!adbFile.exists())
 	{
-		adbFile = Titanium.Filesystem.getFile(platformTools, adb);
+		adbFile = Ti.Filesystem.getFile(platformTools, adb);
 	}
 	
 	var toolsExist = adbFile.exists() && androidFile.exists();
@@ -1499,8 +1499,8 @@ TiDev.validateAndroidSDK = function(sdkDir, callback)
 		return false;
 	}
 	
-	var sdk4 = Titanium.Filesystem.getFile(platforms, 'android-4');
-	var sdk16 = Titanium.Filesystem.getFile(platforms, 'android-1.6');
+	var sdk4 = Ti.Filesystem.getFile(platforms, 'android-4');
+	var sdk16 = Ti.Filesystem.getFile(platforms, 'android-1.6');
 	
 	var haveAPI4 = sdk4.exists() || sdk16.exists();
 	if (!haveAPI4)
