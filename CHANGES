@@ -1,3 +1,9 @@
+1.4.1 (2012-??-??)
+
+	- 
+	- Disabled app analytics
+	- Internal: Namespace change Titanium->Ti
+
 1.4.0 (2012-11-11) - First version of TideSDK Developer
 
 	- Launching and packaging with TideSDK 1.3.0-beta (latest available TideSDK version at time of release)

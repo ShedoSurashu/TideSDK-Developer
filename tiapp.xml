@@ -2,7 +2,7 @@
 <ti:app xmlns:ti='http://ti.appcelerator.org'>
 <id>org.tidesdk.tidesdkdeveloper</id>
 <name>TideSDK Developer</name>
-<version>1.4.0</version>
+<version>1.4.1</version>
 <publisher>TideSDK Community</publisher>
 <url>https://tidesdk.org/</url>
 <icon>default_app_logo.png</icon>
