@@ -1,5 +1,6 @@
 1.4.1 (2012-11-14)
 
+	- Bugfix: Proper view reset after deleting all projects
 	- Inactivated code editor since it is not stable
 	- Disabled app analytics in tiapp.xml to prevent requests to non-existing analytics service
 	- Internal: Namespace change Titanium->Ti
