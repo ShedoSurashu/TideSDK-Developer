@@ -5,7 +5,6 @@
 <version>1.4.0</version>
 <publisher>TideSDK Community</publisher>
 <url>https://tidesdk.org/</url>
-<distribution-url>tidesdk-api.local</distribution-url>
 <icon>default_app_logo.png</icon>
 <dmg_background>dmg_background.png</dmg_background>
 <copyright>2012 by Software In Public Intereset (SPI)</copyright>
