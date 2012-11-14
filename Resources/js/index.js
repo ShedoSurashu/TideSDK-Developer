@@ -661,17 +661,19 @@ Titanium.UpdateManager.onupdate = function(details)
 //
 // Register SDK Update listeners
 //
-Titanium.UpdateManager.startMonitor(['sdk','mobilesdk'],function(details)
+Titanium.UpdateManager.startMonitor(['sdk'],function(details)
 {
 	
 	switch(details.guid)
 	{
 		// mobile
+		/*
 		case "05645B49-C629-4D8F-93AF-F1CF83200E34":
 		{
 			TiDev.showSDKAvailableMessage(Titanium.API.MOBILESDK,'Mobile',details);
 			break;
 		}
+		*/
 		// desktop
 		case "FF71038E-3CD6-40EA-A1C2-CFEE1D284CEA":
 		{
