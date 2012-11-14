@@ -7,6 +7,7 @@
 <url>https://tidesdk.org/</url>
 <icon>default_app_logo.png</icon>
 <dmg_background>dmg_background.png</dmg_background>
+<analytics>false</analytics>
 <copyright>2012 by Software In Public Intereset (SPI)</copyright>
     <window>
         <id>initial</id>
