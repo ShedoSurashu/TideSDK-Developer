@@ -652,7 +652,10 @@ Projects.showAuthenticatedView = function(options)
 	{
 		//TiDev.contentLeft.setContent('<div class="parent">PROJECTS</div><div class="child"><div>No Projects</div></div>');
 		$('#projects_selector').html('<option value="">No Projects</option>');
-		TiDev.subtabChange(0);
+
+		// Reload no projects view
+		var file = Ti.Filesystem.getFile(Ti.App.appURLToPath('perspectives/' + TiDev.activePerspective.name + '/'+ TiDev.activePerspective.html));
+		$('#tiui_content_right').get(0).innerHTML = file.read();
 
 	}
 	
