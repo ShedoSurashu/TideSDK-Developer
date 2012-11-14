@@ -2,6 +2,7 @@ TideSDK Developer
 =======
 
 This is Official TideSDK Developer developed and maintained by community effort of TideSDK Team
+
 TideSDK Developer Supports the latest releases of TideSDK.
 
 Download
@@ -12,7 +13,7 @@ Download
 Build and run
 -----
 
-	python "path-to-TideSDK-sdk/tidebuilder.py" TideSDK-Developer -r
+	python "path-to-TideSDK-sdk/tidebuilder.py" TideSDK-Developer -r -i 'dist,package'
 
 Now it should be running! Feel free to import the project into itself, and hack on it. :)
 
@@ -33,5 +34,4 @@ Copyright(c) 2011-2012 by TideSDK Developer Contributors
 
 Copyright(c) 2008-2011 by Appcelerator, Inc. All Rights Reserved.
 
-Appcelerator is a registered trademark of Appcelerator, Inc. Appcelerator
-Titanium is a trademark of Appcelerator, Inc.
+Appcelerator is a registered trademark of Appcelerator, Inc. Appcelerator. Titanium is a trademark of Appcelerator, Inc.
