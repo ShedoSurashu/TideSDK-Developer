@@ -2448,11 +2448,14 @@ PackageProject.setupDesktopView = function()
 			
 			// tibuild.py was renamed to tidebuilder.py in 1.3.0-beta
 			var builder;
-			if (Ti.UpdateManager.compareVersions(sdk.getVersion(), '1.3.0-beta') < 0)
+			if (Ti.UpdateManager.compareVersions(sdk.getVersion(), '1.3.0-beta') >= 0)
 			{
-				builder = 'tibuild.py';
-			} else {
 				builder = 'tidebuilder.py';
+			} else if (Ti.UpdateManager.compareVersions(sdk.getVersion(), '1.3.1-beta') >= 0)
+			{
+				builder = 'tidebuilder.py';
+			} else {
+				builder = 'tibuild.py';
 			}
 
 			PackageProject.desktopPackage = Ti.Filesystem.getFile(sdk.getPath(),builder);
