@@ -2451,9 +2451,6 @@ PackageProject.setupDesktopView = function()
 			if (Ti.UpdateManager.compareVersions(sdk.getVersion(), '1.3.0-beta') >= 0)
 			{
 				builder = 'tidebuilder.py';
-			} else if (Ti.UpdateManager.compareVersions(sdk.getVersion(), '1.3.1-beta') >= 0)
-			{
-				builder = 'tidebuilder.py';
 			} else {
 				builder = 'tibuild.py';
 			}
